@@ -2,6 +2,8 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
+  <!-- セキュリティのルール：このフォルダの中のファイル以外は読みこまない・動かさない -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <!-- スマホでも見やすくするための設定 -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <!-- ブラウザのタブに出る名前（アプリ名が決まったらここを変える） -->
@@ -19,25 +21,16 @@
       <h2 class="card-title">いまの作業</h2>
 
       <div class="select-row">
-        <!-- サイト名を選ぶ（optionを足せば選べるサイトが増える） -->
+        <!-- サイト名を選ぶ（中身は設定のリストからJavaScriptで自動で入れる） -->
         <label class="select-label">
           サイト名
-          <select id="site-select" class="select">
-            <option value="ポートフォリオ">ポートフォリオ</option>
-            <option value="Moon Bloom">Moon Bloom</option>
-            <option value="シリウスサイト">シリウスサイト</option>
-          </select>
+          <select id="site-select" class="select"></select>
         </label>
 
-        <!-- 作業の種類を選ぶ -->
+        <!-- 工程を選ぶ（中身は設定のリストからJavaScriptで自動で入れる） -->
         <label class="select-label">
-          作業の種類
-          <select id="task-select" class="select">
-            <option value="デザイン">デザイン</option>
-            <option value="コーディング">コーディング</option>
-            <option value="修正">修正</option>
-            <option value="調べもの">調べもの</option>
-          </select>
+          工程
+          <select id="task-select" class="select"></select>
         </label>
       </div>
 
@@ -45,10 +38,10 @@
       <p id="timer" class="timer">00:00:00</p>
 
       <!-- スタート／ストップのボタン（押すたびに切りかわる） -->
-      <button id="start-stop-btn" class="btn btn-start">▶ スタート</button>
+      <button id="start-stop-btn" class="btn btn-start" type="button">▶ スタート</button>
     </section>
 
-    <!-- ===== ② サイトごとの合計時間 ===== -->
+    <!-- ===== ② サイトごとの合計時間（中に工程ごとの時間も出す） ===== -->
     <section class="card">
       <h2 class="card-title">サイトごとの合計</h2>
       <!-- 中身はJavaScriptで自動で入れる -->
@@ -60,6 +53,34 @@
       <h2 class="card-title">記録の一覧</h2>
       <!-- 中身はJavaScriptで自動で入れる -->
       <ul id="record-list" class="record-list"></ul>
+    </section>
+
+    <!-- ===== ④ サイト名・工程の設定（自分で追加・削除できる） ===== -->
+    <section class="card">
+      <h2 class="card-title">サイト名・工程の設定</h2>
+
+      <!-- サイト名の設定 -->
+      <div class="setting-block">
+        <h3 class="setting-title">サイト名</h3>
+        <!-- 入力して「追加」を押すと、選ぶリストに足される -->
+        <form id="site-form" class="add-form">
+          <input id="site-input" class="text-input" type="text" maxlength="30" placeholder="例：新しいサイト" required>
+          <button class="add-btn" type="submit">追加</button>
+        </form>
+        <!-- 今あるサイト名の一覧（JavaScriptで自動で入れる） -->
+        <ul id="site-setting-list" class="setting-list"></ul>
+      </div>
+
+      <!-- 工程の設定 -->
+      <div class="setting-block">
+        <h3 class="setting-title">工程</h3>
+        <form id="task-form" class="add-form">
+          <input id="task-input" class="text-input" type="text" maxlength="30" placeholder="例：打ち合わせ" required>
+          <button class="add-btn" type="submit">追加</button>
+        </form>
+        <!-- 今ある工程の一覧（JavaScriptで自動で入れる） -->
+        <ul id="task-setting-list" class="setting-list"></ul>
+      </div>
     </section>
   </main>
 

@@ -192,3 +192,111 @@ body {
   color: var(--sub-text);
   font-size: 14px;
 }
+
+/* =====================================================
+   ここから下は「サイト名・工程の設定」と「工程ごとの合計」用
+   ===================================================== */
+
+/* ----- サイトごとの合計（中に工程ごとの時間を出す形に変える） ----- */
+.total-item {
+  display: block; /* 前の「横ならび」をやめて、たてに積む */
+}
+
+/* サイト名と合計時間の行 */
+.total-head {
+  display: flex;
+  justify-content: space-between; /* サイト名を左、時間を右にする */
+  font-weight: bold;
+}
+
+/* 工程ごとの時間のリスト（少し右にずらして小さく） */
+.total-sub {
+  list-style: none;
+  margin-top: 4px;
+  padding-left: 12px;
+}
+
+.total-sub-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: var(--sub-text);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ----- 設定のところ ----- */
+.setting-block {
+  margin-bottom: 20px;
+}
+
+.setting-block:last-child {
+  margin-bottom: 0; /* 一番下のブロックは下の余白をなくす */
+}
+
+.setting-title {
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+/* 入力欄と「追加」ボタンを横にならべる */
+.add-form {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.text-input {
+  flex: 1; /* のこりの幅を全部使う */
+  padding: 8px;
+  font-size: 15px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+}
+
+.add-btn {
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #fff;
+  background-color: var(--main);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  opacity: 0.85;
+}
+
+/* 今あるサイト名・工程を、丸いラベルで横にならべる */
+.setting-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap; /* 入りきらなければ次の行へ */
+  gap: 8px;
+}
+
+.setting-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background-color: var(--bg);
+  padding: 4px 6px 4px 12px;
+  border-radius: 999px;
+  font-size: 14px;
+}
+
+/* ラベルの横の「×」ボタン */
+.setting-delete {
+  background: none;
+  border: none;
+  color: var(--sub-text);
+  font-size: 16px;
+  line-height: 1;
+  padding: 2px 4px;
+  cursor: pointer;
+}
+
+.setting-delete:hover {
+  color: var(--stop);
+}
