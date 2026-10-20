@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <!-- スマホでも見やすくするための設定 -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- ブラウザのタブに出る名前（アプリ名が決まったらここを変える） -->
+  <title>作業時間きろく</title>
+  <!-- 見た目のファイル(CSS)を読みこむ -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <!-- アプリの名前 -->
+    <h1 class="app-title">作業時間きろく</h1>
+
+    <!-- ===== ① いまの作業を選んで、時間をはかるところ ===== -->
+    <section class="card">
+      <h2 class="card-title">いまの作業</h2>
+
+      <div class="select-row">
+        <!-- サイト名を選ぶ（optionを足せば選べるサイトが増える） -->
+        <label class="select-label">
+          サイト名
+          <select id="site-select" class="select">
+            <option value="ポートフォリオ">ポートフォリオ</option>
+            <option value="Moon Bloom">Moon Bloom</option>
+            <option value="シリウスサイト">シリウスサイト</option>
+          </select>
+        </label>
+
+        <!-- 作業の種類を選ぶ -->
+        <label class="select-label">
+          作業の種類
+          <select id="task-select" class="select">
+            <option value="デザイン">デザイン</option>
+            <option value="コーディング">コーディング</option>
+            <option value="修正">修正</option>
+            <option value="調べもの">調べもの</option>
+          </select>
+        </label>
+      </div>
+
+      <!-- はかっている時間を表示するところ -->
+      <p id="timer" class="timer">00:00:00</p>
+
+      <!-- スタート／ストップのボタン（押すたびに切りかわる） -->
+      <button id="start-stop-btn" class="btn btn-start">▶ スタート</button>
+    </section>
+
+    <!-- ===== ② サイトごとの合計時間 ===== -->
+    <section class="card">
+      <h2 class="card-title">サイトごとの合計</h2>
+      <!-- 中身はJavaScriptで自動で入れる -->
+      <ul id="total-list" class="total-list"></ul>
+    </section>
+
+    <!-- ===== ③ 記録の一覧 ===== -->
+    <section class="card">
+      <h2 class="card-title">記録の一覧</h2>
+      <!-- 中身はJavaScriptで自動で入れる -->
+      <ul id="record-list" class="record-list"></ul>
+    </section>
+  </main>
+
+  <!-- 動きのファイル(JavaScript)を読みこむ（bodyの一番さいごに書く） -->
+  <script src="script.js"></script>
+</body>
+</html>
