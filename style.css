@@ -300,3 +300,77 @@ body {
 .setting-delete:hover {
   color: var(--stop);
 }
+
+/* =====================================================
+   ここから下は「用語集」用
+   ===================================================== */
+
+/* 工程の下のひとこと説明 */
+.task-hint {
+  font-size: 13px;
+  color: var(--sub-text);
+  margin-top: 8px;
+  min-height: 1.6em; /* 説明がないときも高さを取って、下がガタガタ動かないようにする */
+}
+
+/* 「用語集へ」のリンク */
+.glossary-link {
+  display: inline-block;
+  font-size: 12px;
+  color: var(--main);
+}
+
+/* リンクで移動したとき、なめらかにスクロールさせる */
+html {
+  scroll-behavior: smooth;
+}
+
+/* 用語集の上の説明文 */
+.glossary-lead {
+  font-size: 13px;
+  color: var(--sub-text);
+  margin-bottom: 12px;
+}
+
+.glossary-list {
+  list-style: none;
+}
+
+.glossary-item {
+  border-bottom: 1px solid var(--line);
+}
+
+.glossary-item:last-child {
+  border-bottom: none;
+}
+
+/* 押すと開く言葉の行 */
+.glossary-term {
+  padding: 10px 0;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* 「このアプリの工程」の小さなラベル */
+.glossary-tag {
+  font-size: 11px;
+  font-weight: normal;
+  color: #fff;
+  background-color: var(--main);
+  padding: 1px 8px;
+  border-radius: 999px;
+  margin-left: 8px;
+}
+
+/* 開いたときの説明 */
+.glossary-short {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 4px;
+}
+
+.glossary-detail {
+  font-size: 13px;
+  color: var(--text);
+  padding-bottom: 12px;
+}
