@@ -422,3 +422,86 @@ html {
     word-break: break-all;
     /* 長いメモでも、はみ出さずに折り返す */
 }
+
+/* =====================================================
+   ここから下は「記録を直す・手で足す」用
+   ===================================================== */
+
+/* 記録の「直す」ボタン（「消す」ボタンと同じ見た目） */
+.edit-btn {
+    font-size: 12px;
+    color: var(--sub-text);
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+}
+
+/* 「＋ 記録を手で足す」「やめる」などの、ひかえめなボタン */
+.sub-btn {
+    padding: 8px 16px;
+    font-size: 14px;
+    color: var(--main);
+    background-color: #fff;
+    border: 1px solid var(--main);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.sub-btn:hover {
+    opacity: 0.85;
+}
+
+/* 「＋ 記録を手で足す」ボタンの下に少し余白 */
+#add-record-btn {
+    margin-bottom: 12px;
+}
+
+/* 直す画面（まど）そのもの */
+.edit-dialog {
+    border: none;
+    border-radius: 12px;
+    padding: 20px;
+    width: min(420px, calc(100% - 32px));
+    /* 広くても420px、スマホでは左右に16pxずつ余白 */
+    margin: auto;
+    /* 画面の真ん中に出す */
+    color: var(--text);
+}
+
+/* 直す画面のうしろを、うすく暗くする */
+.edit-dialog::backdrop {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+/* 入力欄をたてにならべる */
+.edit-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 1つずつの入力欄（文字と入力欄をたてにならべる） */
+.edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--sub-text);
+}
+
+/* まちがった入力のときのお知らせ */
+.edit-error {
+    font-size: 13px;
+    color: var(--stop);
+    min-height: 1.6em;
+    /* お知らせがないときも高さを取って、ガタガタ動かないようにする */
+}
+
+/* 「やめる」「保存」ボタンを右にならべる */
+.edit-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+}

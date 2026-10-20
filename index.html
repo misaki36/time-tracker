@@ -41,7 +41,7 @@
             <p id="task-hint" class="task-hint"></p>
             <!-- 押すと下の「用語集」まで移動するリンク -->
             <a href="#glossary" class="glossary-link">言葉がわからないときは「用語集」へ</a>
-            
+
             <!-- メモの入力欄（なくてもOK。はかっている途中でも書き直せる） -->
             <label class="memo-label">
                 メモ（なくてもOK）
@@ -65,6 +65,8 @@
         <!-- ===== ③ 記録の一覧 ===== -->
         <section class="card">
             <h2 class="card-title">記録の一覧</h2>
+            <!-- スタートを押し忘れたとき用：記録を手で足すボタン -->
+            <button id="add-record-btn" class="sub-btn" type="button">＋ 記録を手で足す</button>
             <!-- 中身はJavaScriptで自動で入れる -->
             <ul id="record-list" class="record-list"></ul>
         </section>
@@ -107,10 +109,55 @@
         </section>
     </main>
 
+    <!-- ===== 記録を直す・手で足す画面 =====
+       dialog ＝ 画面の上に重ねて出す、まど のようなタグ（ふだんは見えない） -->
+    <dialog id="edit-dialog" class="edit-dialog">
+        <form id="edit-form" class="edit-form">
+            <!-- 見出し（「記録を直す」か「記録を手で足す」に、JavaScriptで切りかえる） -->
+            <h2 id="edit-title" class="card-title">記録を直す</h2>
+
+            <label class="edit-field">
+                サイト名
+                <select id="edit-site" class="select"></select>
+            </label>
+
+            <label class="edit-field">
+                工程
+                <select id="edit-task" class="select"></select>
+            </label>
+
+            <label class="edit-field">
+                メモ（なくてもOK）
+                <input id="edit-memo" class="text-input" type="text" maxlength="100">
+            </label>
+
+            <!-- datetime-local ＝ 日にちと時刻を選べる入力欄 -->
+            <label class="edit-field">
+                始めた時刻
+                <input id="edit-start" class="text-input" type="datetime-local" required>
+            </label>
+
+            <label class="edit-field">
+                終わった時刻
+                <input id="edit-end" class="text-input" type="datetime-local" required>
+            </label>
+
+            <!-- まちがった入力のときのお知らせ（JavaScriptで文字を入れる） -->
+            <p id="edit-error" class="edit-error"></p>
+
+            <div class="edit-actions">
+                <button id="edit-cancel-btn" class="sub-btn" type="button">やめる</button>
+                <button class="add-btn" type="submit">保存</button>
+            </div>
+        </form>
+    </dialog>
+
     <!-- 動きのファイル(JavaScript)を読みこむ（bodyの一番さいごに書く） -->
     <script src="script.js"></script>
     <!-- 用語集のファイル（script.js の部品を使うので、必ず script.js の下に書く） -->
     <script src="glossary.js"></script>
+    <!-- 記録を直すしくみ（script.js の部品を使うので、必ず script.js の下に書く） -->
+    <script src="edit.js"></script>
 </body>
 
 </html>
