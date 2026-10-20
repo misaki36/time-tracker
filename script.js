@@ -529,55 +529,10 @@ function renderSettings() {
 
 // 記録の一覧と合計を作り直す
 function renderRecords() {
-    // ----- 記録の一覧 -----
-    recordList.textContent = ''; // いったん中身を空にする
-
-    if (records.length === 0) {
-        recordList.appendChild(createElement('li', 'empty-text', 'まだ記録がありません'));
+    // ----- 記録の一覧（日ごとにまとめて表示する。しくみは record-list.js） -----
+    if (typeof renderRecordList === 'function') {
+        renderRecordList();
     }
-
-    // 記録を1つずつ取り出して、リストの1行(li)を作る
-    records.forEach(function (record, index) {
-        const li = createElement('li', 'record-item');
-
-        // 左側：サイト名・工程・メモ・日時・休けい
-        const info = createElement('div', 'record-info');
-        info.appendChild(createElement('span', 'record-site', record.site));
-        info.appendChild(createElement('span', 'record-task', record.task));
-        // メモがあるときだけ表示する
-        if (record.memo) {
-            info.appendChild(createElement('p', 'record-memo', 'メモ：' + record.memo));
-        }
-        info.appendChild(createElement('p', 'record-date',
-            formatDate(record.startTime) + ' 〜 ' + formatDate(record.endTime)));
-        // 休けいしたときだけ表示する
-        if (record.breakTime > 0) {
-            info.appendChild(createElement('p', 'record-break',
-                '休けい ' + formatTime(record.breakTime)));
-        }
-        li.appendChild(info);
-
-        // 右側：作業時間（休けいをのぞいた時間）
-        li.appendChild(createElement('span', 'record-time', formatTime(getWorkTime(record))));
-
-        // 「直す」ボタン（押したら、この記録を直す画面が開く。しくみは edit.js）
-        const editBtn = createElement('button', 'edit-btn', '直す');
-        editBtn.type = 'button';
-        editBtn.addEventListener('click', function () {
-            openEditDialog(index);
-        });
-        li.appendChild(editBtn);
-
-        // 「消す」ボタン（押したら、この記録だけ消す）
-        const deleteBtn = createElement('button', 'delete-btn', '消す');
-        deleteBtn.type = 'button';
-        deleteBtn.addEventListener('click', function () {
-            deleteRecord(index);
-        });
-        li.appendChild(deleteBtn);
-
-        recordList.appendChild(li);
-    });
 
     // ----- サイトごとの合計（その中に工程ごとの合計） -----
     // 例：{ ポートフォリオ: { total: 7200000, tasks: { ワイヤー: 3600000, 実装: 3600000 } } }
@@ -631,17 +586,12 @@ function renderRecords() {
     if (typeof renderCharts === 'function') {
         renderCharts();
     }
-    // グラフも作り直す（charts.js が読みこまれてからだけ動く）
-    if (typeof renderCharts === 'function') {
-        renderCharts();
-    }
 
     // 予定と実際も作り直す（plan.js が読みこまれてからだけ動く）
     if (typeof renderPlans === 'function') {
         renderPlans();
     }
 }
-
 
 // 画面を全部作り直す
 function renderAll() {
@@ -651,21 +601,12 @@ function renderAll() {
     if (typeof updateTaskHint === 'function') {
         updateTaskHint();
     }
-
-    // 画面を全部作り直す
-    function renderAll() {
-        renderSettings();
-        renderRecords();
-        // 工程の説明も更新する（glossary.js が読みこまれてからだけ動く）
-        if (typeof updateTaskHint === 'function') {
-            updateTaskHint();
-        }
-        // ToDoのサイト名も更新する（todo.js が読みこまれてからだけ動く）
-        if (typeof renderTodos === 'function') {
-            renderTodos();
-        }
+    // ToDoのサイト名も更新する（todo.js が読みこまれてからだけ動く）
+    if (typeof renderTodos === 'function') {
+        renderTodos();
     }
 }
+
 
 // =====================================================
 // 8. ページを開いたときに最初に動くところ

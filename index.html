@@ -191,6 +191,26 @@
             <h2 class="card-title">記録の一覧</h2>
             <!-- スタートを押し忘れたとき用：記録を手で足すボタン -->
             <button id="add-record-btn" class="sub-btn" type="button">＋ 記録を手で足す</button>
+
+            <!-- 見る期間とサイトをしぼる -->
+            <div class="record-filters">
+                <label class="record-filter-label">
+                    期間
+                    <select id="record-period" class="select">
+                        <option value="today">今日</option>
+                        <option value="7days" selected>この7日間</option>
+                        <option value="30days">この30日間</option>
+                        <option value="all">すべて</option>
+                    </select>
+                </label>
+                <label class="record-filter-label">
+                    サイト
+                    <select id="record-site-filter" class="select"></select>
+                </label>
+            </div>
+
+            <!-- 「この期間：◯件・合計 ◯」のまとめ（record-list.js で自動で入れる） -->
+            <p id="record-summary" class="record-summary"></p>
             <!-- 中身はJavaScriptで自動で入れる -->
             <ul id="record-list" class="record-list"></ul>
         </section>
@@ -344,6 +364,8 @@
     <script src="reminder.js"></script>
     <!-- 予定と実際のしくみ（script.js の部品を使うので、その下に書く） -->
     <script src="plan.js"></script>
+    <!-- 記録の一覧を日ごとにまとめるしくみ（script.js と edit.js の部品を使うので、その下に書く） -->
+    <script src="record-list.js"></script>
 </body>
 
 </html>
