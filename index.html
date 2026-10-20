@@ -22,6 +22,15 @@
         <!-- ===== ① いまの作業を選んで、時間をはかるところ ===== -->
         <section class="card">
             <h2 class="card-title">いまの作業</h2>
+            <!-- ストップ忘れのお知らせ（ふだんはかくしておく） -->
+            <div id="reminder-box" class="reminder-box" role="alert" hidden>
+                <p id="reminder-text" class="reminder-text"></p>
+                <div class="reminder-actions">
+                    <button id="reminder-continue-btn" class="sub-btn" type="button">まだ作業中</button>
+                    <button id="reminder-fix-btn" class="sub-btn" type="button">ストップして時刻を直す</button>
+                    <button id="reminder-stop-btn" class="add-btn" type="button">ストップする</button>
+                </div>
+            </div>
 
             <div class="select-row">
                 <!-- サイト名を選ぶ（中身は設定のリストからJavaScriptで自動で入れる） -->
@@ -182,7 +191,49 @@
                 <!-- 今ある工程の一覧（JavaScriptで自動で入れる） -->
                 <ul id="task-setting-list" class="setting-list"></ul>
             </div>
+
+
+            <!-- ストップ忘れのお知らせの設定 -->
+            <div class="setting-block">
+                <h3 class="setting-title">ストップ忘れのお知らせ</h3>
+                <label class="reminder-setting-label">
+                    作業時間がこれをこえたらお知らせする
+                    <select id="reminder-setting" class="select">
+                        <option value="1">1時間</option>
+                        <option value="2">2時間</option>
+                        <option value="3">3時間</option>
+                        <option value="4">4時間</option>
+                        <option value="0">お知らせしない</option>
+                    </select>
+                </label>
+                <p class="setting-note">休けいが30分をこえたときも、お知らせします。</p>
+                <!-- パソコンの通知を使っていいか、ブラウザに聞くボタン -->
+                <button id="notify-btn" class="sub-btn" type="button">パソコンの通知でも受け取る</button>
+                <p id="notify-status" class="setting-note"></p>
+            </div>
         </section>
+
+        <!-- ===== ⑥ データのバックアップ ===== -->
+        <section class="card">
+            <h2 class="card-title">データのバックアップ</h2>
+            <p class="backup-lead">記録はこのブラウザの中だけに保存されています。ときどき書き出しておくと安心です。</p>
+
+            <div class="backup-actions">
+                <!-- 記録・設定・ToDoを全部、1つのファイルに書き出す -->
+                <button id="export-json-btn" class="sub-btn" type="button">バックアップを書き出す</button>
+                <!-- 記録を、Excelで開ける形で書き出す -->
+                <button id="export-csv-btn" class="sub-btn" type="button">Excel用に書き出す（CSV）</button>
+                <!-- ファイルを選んで読みこむ（input は見えなくして、label をボタンのように見せる） -->
+                <label class="sub-btn import-label">
+                    バックアップを読みこむ
+                    <input id="import-input" class="import-input" type="file" accept=".json,application/json">
+                </label>
+            </div>
+
+            <!-- 「書き出しました」などのお知らせ（JavaScriptで文字を入れる） -->
+            <p id="backup-status" class="backup-status" role="status"></p>
+        </section>
+
     </main>
 
     <!-- ===== 記録を直す・手で足す画面 =====
@@ -246,6 +297,12 @@
     <script src="lib/chart.umd.js"></script>
     <!-- グラフのしくみ（script.js と Chart.js を使うので、その下に書く） -->
     <script src="charts.js"></script>
+    <!-- バックアップのしくみ（todo.js の部品も使うので、todo.js より下に書く） -->
+    <script src="backup.js"></script>
+    <!-- タブに時間を出すしくみ -->
+    <script src="tab-title.js"></script>
+    <!-- ストップ忘れのお知らせのしくみ（script.js と edit.js の部品を使うので、その下に書く） -->
+    <script src="reminder.js"></script>
 </body>
 
 </html>
