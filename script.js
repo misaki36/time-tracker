@@ -626,6 +626,11 @@ function renderRecords() {
 
         totalList.appendChild(li);
     });
+
+    // グラフも作り直す（charts.js が読みこまれてからだけ動く）
+    if (typeof renderCharts === 'function') {
+        renderCharts();
+    }
 }
 
 // 画面を全部作り直す

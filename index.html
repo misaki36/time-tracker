@@ -97,6 +97,47 @@
             <ul id="total-list" class="total-list"></ul>
         </section>
 
+        <!-- ===== グラフ ===== -->
+        <section class="card">
+            <h2 class="card-title">グラフ</h2>
+
+            <!-- 今日の作業時間の合計（JavaScriptで自動で入れる） -->
+            <p id="today-total" class="today-total"></p>
+
+            <!-- 棒グラフ：この7日間、1日どれだけやったか -->
+            <h3 class="chart-title">この7日間の作業時間</h3>
+            <div id="bar-box" class="chart-box">
+                <!-- canvas ＝ 絵をかくための板。ここにグラフがかかれる -->
+                <canvas id="bar-chart" role="img" aria-label="この7日間の作業時間の棒グラフ"></canvas>
+            </div>
+            <p id="bar-empty" class="empty-text" hidden>この7日間の記録はまだありません</p>
+
+            <!-- 円グラフ：何に時間を使ったか -->
+            <h3 class="chart-title">何に時間を使ったか</h3>
+            <div class="chart-controls">
+                <label class="chart-label">
+                    期間
+                    <select id="chart-period" class="select">
+                        <option value="today">今日</option>
+                        <option value="7days" selected>この7日間</option>
+                        <option value="30days">この30日間</option>
+                        <option value="all">すべて</option>
+                    </select>
+                </label>
+                <label class="chart-label">
+                    分け方
+                    <select id="chart-group" class="select">
+                        <option value="task">工程ごと</option>
+                        <option value="site">サイトごと</option>
+                    </select>
+                </label>
+            </div>
+            <div id="pie-box" class="chart-box">
+                <canvas id="pie-chart" role="img" aria-label="何に時間を使ったかの円グラフ"></canvas>
+            </div>
+            <p id="pie-empty" class="empty-text" hidden>この期間の記録はまだありません</p>
+        </section>
+
         <!-- ===== ③ 記録の一覧 ===== -->
         <section class="card">
             <h2 class="card-title">記録の一覧</h2>
@@ -201,6 +242,10 @@
     <script src="edit.js"></script>
     <!-- ToDoリストのしくみ（script.js の部品を使うので、必ず script.js の下に書く） -->
     <script src="todo.js"></script>
+    <!-- グラフを作る道具（Chart.js）。charts.js より先に読みこむ -->
+    <script src="lib/chart.umd.js"></script>
+    <!-- グラフのしくみ（script.js と Chart.js を使うので、その下に書く） -->
+    <script src="charts.js"></script>
 </body>
 
 </html>
