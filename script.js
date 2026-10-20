@@ -631,7 +631,17 @@ function renderRecords() {
     if (typeof renderCharts === 'function') {
         renderCharts();
     }
+    // グラフも作り直す（charts.js が読みこまれてからだけ動く）
+    if (typeof renderCharts === 'function') {
+        renderCharts();
+    }
+
+    // 予定と実際も作り直す（plan.js が読みこまれてからだけ動く）
+    if (typeof renderPlans === 'function') {
+        renderPlans();
+    }
 }
+
 
 // 画面を全部作り直す
 function renderAll() {

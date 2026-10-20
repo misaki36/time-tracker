@@ -106,6 +106,45 @@
             <ul id="total-list" class="total-list"></ul>
         </section>
 
+        <!-- ===== 予定と実際（見積もりの材料にする） ===== -->
+        <section class="card">
+            <h2 class="card-title">予定と実際</h2>
+            <p class="plan-lead">工程ごとに予定の時間を入れると、実際にかかった時間とくらべられます。</p>
+
+            <div class="plan-controls">
+                <!-- どのサイトを見るか -->
+                <label class="plan-label">
+                    サイト名
+                    <select id="plan-site" class="select"></select>
+                </label>
+                <!-- 受ける金額（入れると時給が出る） -->
+                <label class="plan-label">
+                    受ける金額（円・なくてもOK）
+                    <input id="plan-price" class="text-input" type="number" min="0" step="1000" placeholder="例：50000">
+                </label>
+            </div>
+
+            <!-- 予定と実際の表（中身は plan.js で自動で入れる）
+           横に入りきらないときは、表だけ横にスクロールできるようにする -->
+            <div class="plan-table-wrap">
+                <table class="plan-table">
+                    <thead>
+                        <tr>
+                            <th scope="col">工程</th>
+                            <th scope="col">予定（時間）</th>
+                            <th scope="col">実際</th>
+                            <th scope="col">差</th>
+                        </tr>
+                    </thead>
+                    <tbody id="plan-body"></tbody>
+                    <tfoot id="plan-foot"></tfoot>
+                </table>
+            </div>
+
+            <!-- 時給などのまとめ（plan.js で自動で入れる） -->
+            <p id="plan-summary" class="plan-summary"></p>
+        </section>
+
         <!-- ===== グラフ ===== -->
         <section class="card">
             <h2 class="card-title">グラフ</h2>
@@ -303,6 +342,8 @@
     <script src="tab-title.js"></script>
     <!-- ストップ忘れのお知らせのしくみ（script.js と edit.js の部品を使うので、その下に書く） -->
     <script src="reminder.js"></script>
+    <!-- 予定と実際のしくみ（script.js の部品を使うので、その下に書く） -->
+    <script src="plan.js"></script>
 </body>
 
 </html>

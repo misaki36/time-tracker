@@ -104,8 +104,11 @@ exportJsonBtn.addEventListener('click', function () {
         records: records,
         sites: sites,
         tasks: tasks,
-        todos: todos
+        todos: todos,
+        // 予定と金額（plan.js があるときだけ）
+        plans: typeof getPlansForBackup === 'function' ? getPlansForBackup() : {}
     };
+
     // JSON.stringify の「null, 2」は、人が読んでも分かりやすいように字下げする設定
     const content = JSON.stringify(data, null, 2);
     downloadFile(content, 'time-tracker-backup-' + todayForFileName() + '.json', 'application/json');
@@ -231,6 +234,11 @@ importInput.addEventListener('change', function () {
         replaceArray(sites, newSites);
         replaceArray(tasks, newTasks);
         replaceArray(todos, newTodos);
+
+        // 予定と金額も入れかえる（plan.js があるときだけ）
+        if (typeof setPlansFromBackup === 'function') {
+            setPlansFromBackup(data.plans);
+        }
 
         // ブラウザに保存する
         saveData(RECORDS_KEY, records);

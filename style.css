@@ -809,3 +809,116 @@ html {
     color: var(--sub-text);
     margin-bottom: 8px;
 }
+
+/* =====================================================
+   ここから下は「予定と実際」用
+   ===================================================== */
+
+.plan-lead {
+    font-size: 13px;
+    color: var(--sub-text);
+    margin-bottom: 12px;
+}
+
+/* 「サイト名」と「受ける金額」を横にならべる（入りきらなければ折り返す） */
+.plan-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.plan-label {
+    flex: 1 1 180px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--sub-text);
+}
+
+/* 表が入りきらないときは、表だけ横にスクロール */
+.plan-table-wrap {
+    overflow-x: auto;
+}
+
+.plan-table {
+    width: 100%;
+    border-collapse: collapse;
+    /* マスのあいだのすきまをなくす */
+    font-size: 13px;
+    font-variant-numeric: tabular-nums;
+}
+
+.plan-table th,
+.plan-table td {
+    padding: 8px 6px;
+    border-bottom: 1px solid var(--line);
+    text-align: left;
+    vertical-align: middle;
+}
+
+/* 見出しの行 */
+.plan-table thead th {
+    font-size: 12px;
+    font-weight: normal;
+    color: var(--sub-text);
+}
+
+/* 工程の名前 */
+.plan-task {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* 予定を入れる小さな入力欄 */
+.plan-input {
+    width: 72px;
+    padding: 6px;
+    font-size: 14px;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+}
+
+/* ゲージ（progress タグ） */
+.plan-progress {
+    display: block;
+    width: 100%;
+    min-width: 60px;
+    height: 6px;
+    margin-top: 4px;
+    accent-color: var(--main);
+    /* ゲージの色をメインの色にする */
+}
+
+/* 予定をこえたゲージは赤くする */
+.plan-progress.is-over {
+    accent-color: var(--stop);
+}
+
+/* 差の文字 */
+.plan-under {
+    color: var(--main);
+    white-space: nowrap;
+}
+
+.plan-over {
+    color: var(--stop);
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* 合計の行 */
+.plan-total-row th,
+.plan-total-row td {
+    font-weight: bold;
+    border-bottom: none;
+}
+
+/* 時給などのまとめ（改行をそのまま出す） */
+.plan-summary {
+    white-space: pre-line;
+    font-size: 14px;
+    margin-top: 12px;
+    line-height: 1.8;
+}
