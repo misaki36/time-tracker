@@ -560,3 +560,118 @@ html {
     font-size: 12px;
     color: #b08a45;
 }
+
+/* =====================================================
+   ここから下は「ToDoリスト」用
+   ===================================================== */
+
+/* ToDoを足すフォーム（入りきらなければ折り返す） */
+.todo-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.todo-form .select {
+    flex: 1 1 140px;
+    /* 140pxをめやすに、のびちぢみする */
+}
+
+.todo-form .text-input {
+    flex: 2 1 200px;
+    /* 入力欄は、選ぶ箱より広めにする */
+}
+
+/* 「表示」と「のこり◯件」を左右にならべる */
+.todo-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.todo-filter-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--sub-text);
+}
+
+.todo-count {
+    font-size: 13px;
+    color: var(--sub-text);
+}
+
+.todo-list {
+    list-style: none;
+    margin-bottom: 12px;
+}
+
+/* ToDoの1行 */
+.todo-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+}
+
+.todo-item:last-child {
+    border-bottom: none;
+}
+
+/* チェックと文字（文字を押してもチェックできる） */
+.todo-check {
+    flex: 1;
+    /* のこりの幅を全部使う */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    word-break: break-all;
+    /* 長い文字でも、はみ出さずに折り返す */
+}
+
+.todo-check input {
+    width: 18px;
+    height: 18px;
+    accent-color: var(--main);
+    /* チェックの色をメインの色にする */
+    flex-shrink: 0;
+    /* チェックがつぶれないようにする */
+}
+
+/* 「すべてのサイト」で見ているときに出す、サイト名の小さなラベル */
+.todo-site {
+    font-size: 11px;
+    background-color: var(--bg);
+    padding: 2px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+    /* サイト名を折り返さない */
+}
+
+/* 「▶ はじめる」ボタン */
+.todo-start-btn {
+    font-size: 12px;
+    color: #fff;
+    background-color: var(--main);
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.todo-start-btn:hover {
+    opacity: 0.85;
+}
+
+/* 終わったToDo（線を引いて、うすくする） */
+.todo-item.is-done .todo-text {
+    text-decoration: line-through;
+    color: var(--sub-text);
+}
