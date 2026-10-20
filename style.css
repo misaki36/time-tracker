@@ -1,196 +1,215 @@
 /* ===== 色の設定（ここを変えるとアプリ全体の色が変わる） ===== */
 :root {
-  --bg: #f7f4ef;        /* 背景の色 */
-  --card: #ffffff;      /* カードの色 */
-  --text: #333333;      /* 文字の色 */
-  --sub-text: #888888;  /* うすい文字の色 */
-  --main: #6b8e7f;      /* メインの色（スタートボタンなど） */
-  --stop: #d9776b;      /* ストップボタンの色 */
-  --line: #e5e0d8;      /* 線の色 */
+    --bg: #f7f4ef;
+    /* 背景の色 */
+    --card: #ffffff;
+    /* カードの色 */
+    --text: #333333;
+    /* 文字の色 */
+    --sub-text: #888888;
+    /* うすい文字の色 */
+    --main: #6b8e7f;
+    /* メインの色（スタートボタンなど） */
+    --stop: #d9776b;
+    /* ストップボタンの色 */
+    --line: #e5e0d8;
+    /* 線の色 */
 }
 
 /* ===== 全体のリセット ===== */
 * {
-  box-sizing: border-box; /* 幅に余白(padding)もふくめて計算する */
-  margin: 0;
-  padding: 0;
+    box-sizing: border-box;
+    /* 幅に余白(padding)もふくめて計算する */
+    margin: 0;
+    padding: 0;
 }
 
 body {
-  background-color: var(--bg);
-  color: var(--text);
-  font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
-  line-height: 1.6;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
+    line-height: 1.6;
 }
 
 /* 中身を真ん中に、横幅を広がりすぎないようにする */
 .container {
-  max-width: 560px;
-  margin: 0 auto;
-  padding: 32px 16px;
+    max-width: 560px;
+    margin: 0 auto;
+    padding: 32px 16px;
 }
 
 .app-title {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 24px;
+    font-size: 24px;
+    text-align: center;
+    margin-bottom: 24px;
 }
 
 /* ===== カード（白い四角） ===== */
 .card {
-  background-color: var(--card);
-  border-radius: 12px;
-  padding: 20px;
-  margin-bottom: 20px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    background-color: var(--card);
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
 
 .card-title {
-  font-size: 16px;
-  margin-bottom: 12px;
+    font-size: 16px;
+    margin-bottom: 12px;
 }
 
 /* ===== 選ぶところ ===== */
 .select-row {
-  display: flex; /* 2つを横にならべる */
-  gap: 12px;
+    display: flex;
+    /* 2つを横にならべる */
+    gap: 12px;
 }
 
 .select-label {
-  flex: 1; /* 2つを同じ幅にする */
-  display: flex;
-  flex-direction: column; /* 文字と選ぶ箱をたてにならべる */
-  font-size: 13px;
-  color: var(--sub-text);
-  gap: 4px;
+    flex: 1;
+    /* 2つを同じ幅にする */
+    display: flex;
+    flex-direction: column;
+    /* 文字と選ぶ箱をたてにならべる */
+    font-size: 13px;
+    color: var(--sub-text);
+    gap: 4px;
 }
 
 .select {
-  padding: 8px;
-  font-size: 15px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background-color: #fff;
+    padding: 8px;
+    font-size: 15px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    background-color: #fff;
 }
 
 /* はかっている間は選べないので、うすくする */
 .select:disabled {
-  background-color: #f3f3f3;
-  color: var(--sub-text);
+    background-color: #f3f3f3;
+    color: var(--sub-text);
 }
 
 /* ===== タイマーの数字 ===== */
 .timer {
-  font-size: 48px;
-  font-weight: bold;
-  text-align: center;
-  margin: 20px 0;
-  font-variant-numeric: tabular-nums; /* 数字の幅をそろえて、ガタガタ動かないようにする */
+    font-size: 48px;
+    font-weight: bold;
+    text-align: center;
+    margin: 20px 0;
+    font-variant-numeric: tabular-nums;
+    /* 数字の幅をそろえて、ガタガタ動かないようにする */
 }
 
 /* ===== ボタン ===== */
 .btn {
-  display: block;
-  width: 100%;
-  padding: 14px;
-  font-size: 18px;
-  font-weight: bold;
-  color: #fff;
-  border: none;
-  border-radius: 999px; /* 角を丸くする */
-  cursor: pointer;      /* マウスをのせると指の形になる */
+    display: block;
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    font-weight: bold;
+    color: #fff;
+    border: none;
+    border-radius: 999px;
+    /* 角を丸くする */
+    cursor: pointer;
+    /* マウスをのせると指の形になる */
 }
 
 .btn-start {
-  background-color: var(--main);
+    background-color: var(--main);
 }
 
 .btn-stop {
-  background-color: var(--stop);
+    background-color: var(--stop);
 }
 
 .btn:hover {
-  opacity: 0.85; /* マウスをのせたら少しうすくする */
+    opacity: 0.85;
+    /* マウスをのせたら少しうすくする */
 }
 
 /* ===== サイトごとの合計 ===== */
 .total-list {
-  list-style: none; /* 「・」を消す */
+    list-style: none;
+    /* 「・」を消す */
 }
 
 .total-item {
-  display: flex;
-  justify-content: space-between; /* サイト名を左、時間を右にする */
-  padding: 8px 0;
-  border-bottom: 1px solid var(--line);
+    display: flex;
+    justify-content: space-between;
+    /* サイト名を左、時間を右にする */
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
 }
 
 .total-item:last-child {
-  border-bottom: none; /* 一番下の線は消す */
+    border-bottom: none;
+    /* 一番下の線は消す */
 }
 
 .total-time {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 /* ===== 記録の一覧 ===== */
 .record-list {
-  list-style: none;
+    list-style: none;
 }
 
 .record-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 0;
-  border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
 }
 
 .record-item:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 .record-info {
-  flex: 1; /* のこりの幅を全部使う */
+    flex: 1;
+    /* のこりの幅を全部使う */
 }
 
 .record-site {
-  font-weight: bold;
-  margin-right: 8px;
+    font-weight: bold;
+    margin-right: 8px;
 }
 
 /* 作業の種類を小さなラベルにする */
 .record-task {
-  font-size: 12px;
-  background-color: var(--bg);
-  padding: 2px 8px;
-  border-radius: 999px;
+    font-size: 12px;
+    background-color: var(--bg);
+    padding: 2px 8px;
+    border-radius: 999px;
 }
 
 .record-date {
-  font-size: 12px;
-  color: var(--sub-text);
+    font-size: 12px;
+    color: var(--sub-text);
 }
 
 .record-time {
-  font-weight: bold;
-  font-variant-numeric: tabular-nums;
+    font-weight: bold;
+    font-variant-numeric: tabular-nums;
 }
 
 .delete-btn {
-  font-size: 12px;
-  color: var(--sub-text);
-  background: none;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  padding: 4px 8px;
-  cursor: pointer;
+    font-size: 12px;
+    color: var(--sub-text);
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
 }
 
 /* 記録がないときの文字 */
 .empty-text {
-  color: var(--sub-text);
-  font-size: 14px;
+    color: var(--sub-text);
+    font-size: 14px;
 }
 
 /* =====================================================
@@ -199,106 +218,111 @@ body {
 
 /* ----- サイトごとの合計（中に工程ごとの時間を出す形に変える） ----- */
 .total-item {
-  display: block; /* 前の「横ならび」をやめて、たてに積む */
+    display: block;
+    /* 前の「横ならび」をやめて、たてに積む */
 }
 
 /* サイト名と合計時間の行 */
 .total-head {
-  display: flex;
-  justify-content: space-between; /* サイト名を左、時間を右にする */
-  font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+    /* サイト名を左、時間を右にする */
+    font-weight: bold;
 }
 
 /* 工程ごとの時間のリスト（少し右にずらして小さく） */
 .total-sub {
-  list-style: none;
-  margin-top: 4px;
-  padding-left: 12px;
+    list-style: none;
+    margin-top: 4px;
+    padding-left: 12px;
 }
 
 .total-sub-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 13px;
-  color: var(--sub-text);
-  font-variant-numeric: tabular-nums;
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    color: var(--sub-text);
+    font-variant-numeric: tabular-nums;
 }
 
 /* ----- 設定のところ ----- */
 .setting-block {
-  margin-bottom: 20px;
+    margin-bottom: 20px;
 }
 
 .setting-block:last-child {
-  margin-bottom: 0; /* 一番下のブロックは下の余白をなくす */
+    margin-bottom: 0;
+    /* 一番下のブロックは下の余白をなくす */
 }
 
 .setting-title {
-  font-size: 14px;
-  margin-bottom: 8px;
+    font-size: 14px;
+    margin-bottom: 8px;
 }
 
 /* 入力欄と「追加」ボタンを横にならべる */
 .add-form {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
 }
 
 .text-input {
-  flex: 1; /* のこりの幅を全部使う */
-  padding: 8px;
-  font-size: 15px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+    flex: 1;
+    /* のこりの幅を全部使う */
+    padding: 8px;
+    font-size: 15px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
 }
 
 .add-btn {
-  padding: 8px 16px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #fff;
-  background-color: var(--main);
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+    padding: 8px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+    background-color: var(--main);
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
 }
 
 .add-btn:hover {
-  opacity: 0.85;
+    opacity: 0.85;
 }
 
 /* 今あるサイト名・工程を、丸いラベルで横にならべる */
 .setting-list {
-  list-style: none;
-  display: flex;
-  flex-wrap: wrap; /* 入りきらなければ次の行へ */
-  gap: 8px;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    /* 入りきらなければ次の行へ */
+    gap: 8px;
 }
 
 .setting-item {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  background-color: var(--bg);
-  padding: 4px 6px 4px 12px;
-  border-radius: 999px;
-  font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    background-color: var(--bg);
+    padding: 4px 6px 4px 12px;
+    border-radius: 999px;
+    font-size: 14px;
 }
 
 /* ラベルの横の「×」ボタン */
 .setting-delete {
-  background: none;
-  border: none;
-  color: var(--sub-text);
-  font-size: 16px;
-  line-height: 1;
-  padding: 2px 4px;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: var(--sub-text);
+    font-size: 16px;
+    line-height: 1;
+    padding: 2px 4px;
+    cursor: pointer;
 }
 
 .setting-delete:hover {
-  color: var(--stop);
+    color: var(--stop);
 }
 
 /* =====================================================
@@ -307,70 +331,94 @@ body {
 
 /* 工程の下のひとこと説明 */
 .task-hint {
-  font-size: 13px;
-  color: var(--sub-text);
-  margin-top: 8px;
-  min-height: 1.6em; /* 説明がないときも高さを取って、下がガタガタ動かないようにする */
+    font-size: 13px;
+    color: var(--sub-text);
+    margin-top: 8px;
+    min-height: 1.6em;
+    /* 説明がないときも高さを取って、下がガタガタ動かないようにする */
 }
 
 /* 「用語集へ」のリンク */
 .glossary-link {
-  display: inline-block;
-  font-size: 12px;
-  color: var(--main);
+    display: inline-block;
+    font-size: 12px;
+    color: var(--main);
 }
 
 /* リンクで移動したとき、なめらかにスクロールさせる */
 html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
 }
 
 /* 用語集の上の説明文 */
 .glossary-lead {
-  font-size: 13px;
-  color: var(--sub-text);
-  margin-bottom: 12px;
+    font-size: 13px;
+    color: var(--sub-text);
+    margin-bottom: 12px;
 }
 
 .glossary-list {
-  list-style: none;
+    list-style: none;
 }
 
 .glossary-item {
-  border-bottom: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
 }
 
 .glossary-item:last-child {
-  border-bottom: none;
+    border-bottom: none;
 }
 
 /* 押すと開く言葉の行 */
 .glossary-term {
-  padding: 10px 0;
-  font-weight: bold;
-  cursor: pointer;
+    padding: 10px 0;
+    font-weight: bold;
+    cursor: pointer;
 }
 
 /* 「このアプリの工程」の小さなラベル */
 .glossary-tag {
-  font-size: 11px;
-  font-weight: normal;
-  color: #fff;
-  background-color: var(--main);
-  padding: 1px 8px;
-  border-radius: 999px;
-  margin-left: 8px;
+    font-size: 11px;
+    font-weight: normal;
+    color: #fff;
+    background-color: var(--main);
+    padding: 1px 8px;
+    border-radius: 999px;
+    margin-left: 8px;
 }
 
 /* 開いたときの説明 */
 .glossary-short {
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 4px;
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 4px;
 }
 
 .glossary-detail {
-  font-size: 13px;
-  color: var(--text);
-  padding-bottom: 12px;
+    font-size: 13px;
+    color: var(--text);
+    padding-bottom: 12px;
+}
+
+/* =====================================================
+   ここから下は「メモ」用
+   ===================================================== */
+
+/* メモの入力欄（文字と入力欄をたてにならべる） */
+.memo-label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--sub-text);
+}
+
+/* 記録の一覧に出すメモ */
+.record-memo {
+    font-size: 13px;
+    color: var(--text);
+    margin-top: 2px;
+    word-break: break-all;
+    /* 長いメモでも、はみ出さずに折り返す */
 }
