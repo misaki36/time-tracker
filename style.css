@@ -992,3 +992,69 @@ details[open]>.record-day-head .record-day-date::before {
     list-style: none;
     padding: 0 4px;
 }
+
+/* =====================================================
+   ここから下は「使い方」用
+   ===================================================== */
+
+/* 使い方のかたまり（タイトルの下で、真ん中にそろえる） */
+.howto {
+    margin-top: -12px;
+    /* タイトルに少し近づける */
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* 「？ 使い方」の文字（押すところ） */
+.howto-toggle {
+    display: inline-block;
+    font-size: 13px;
+    color: var(--main);
+    cursor: pointer;
+    list-style: none;
+    /* もとの三角のマークを消す */
+    padding: 4px 12px;
+    border-radius: 999px;
+}
+
+/* Safari用：もとの三角のマークを消す */
+.howto-toggle::-webkit-details-marker {
+    display: none;
+}
+
+.howto-toggle:hover {
+    background-color: var(--card);
+}
+
+/* 開いたときの中身（白いカードのように見せる） */
+.howto-body {
+    text-align: left;
+    background-color: var(--card);
+    border-radius: 12px;
+    padding: 16px 20px;
+    margin-top: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* 中の小見出し */
+.howto-title {
+    font-size: 14px;
+    margin-top: 12px;
+    margin-bottom: 4px;
+}
+
+.howto-title:first-child {
+    margin-top: 0;
+    /* 一番上の小見出しは上の余白をなくす */
+}
+
+/* 中のリスト */
+.howto-list {
+    font-size: 13px;
+    padding-left: 1.4em;
+    /* 「1.」や「・」が見えるように少し右にずらす */
+}
+
+.howto-list li {
+    margin-bottom: 2px;
+}
