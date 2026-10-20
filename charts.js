@@ -48,10 +48,13 @@ function addDays(timestamp, days) {
     return date.getTime();
 }
 
-// 日にちを「10/20(火)」の形にする
+// 日にちを「10/20」と「(火)」の2行にする（配列にすると、グラフが2行で出してくれる）
 function formatDay(timestamp) {
     const date = new Date(timestamp);
-    return (date.getMonth() + 1) + '/' + date.getDate() + '(' + WEEK_LABELS[date.getDay()] + ')';
+    return [
+        (date.getMonth() + 1) + '/' + date.getDate(),
+        '(' + WEEK_LABELS[date.getDay()] + ')'
+    ];
 }
 
 // 名前ごとに、いつも同じ色を使うしくみ
@@ -149,9 +152,14 @@ function renderBarChart() {
                 y: {
                     stacked: true,
                     beginAtZero: true,
+                    suggestedMax: 1, // 記録が少なくても、目もりは最低1時間まで出す
                     ticks: {
                         callback: function (value) {
-                            return value + '時間'; // 左の目もりに「時間」を付ける
+                            // 1時間より少ないところは「◯分」、それ以上は「◯時間」で出す
+                            if (value < 1) {
+                                return Math.round(value * 60) + '分';
+                            }
+                            return value + '時間';
                         }
                     }
                 }
