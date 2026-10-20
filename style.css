@@ -505,3 +505,58 @@ html {
     justify-content: flex-end;
     gap: 8px;
 }
+
+/* =====================================================
+   ここから下は「休けい」用
+   ===================================================== */
+
+/* hidden（かくす）を付けたものは、必ずかくす
+   （.btn に display: block を付けているので、これがないとかくれないため） */
+[hidden] {
+    display: none !important;
+}
+
+/* スタート／ストップと休けいのボタンを横にならべる */
+.btn-row {
+    display: flex;
+    gap: 12px;
+}
+
+.btn-row .btn {
+    flex: 1;
+    /* ボタンが2つのときは半分ずつ、1つのときは全部の幅 */
+}
+
+/* 休けいボタン */
+.btn-break {
+    background-color: #c9a96e;
+}
+
+/* 休けい中の「作業にもどる」ボタン */
+.btn-resume {
+    background-color: var(--main);
+}
+
+/* 休けい中は、作業時間の数字をうすくする */
+.timer.is-break {
+    color: var(--sub-text);
+}
+
+/* 休けいの時間の表示 */
+.break-status {
+    text-align: center;
+    font-size: 14px;
+    color: #b08a45;
+    margin-top: -12px;
+    /* タイマーの数字に少し近づける */
+    margin-bottom: 16px;
+    min-height: 1.6em;
+    /* 表示がないときも高さを取って、ガタガタ動かないようにする */
+    font-variant-numeric: tabular-nums;
+}
+
+/* 記録の一覧に出す休けい時間 */
+.record-break {
+    font-size: 12px;
+    color: #b08a45;
+}
