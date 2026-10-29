@@ -31,7 +31,7 @@
                 <h2 class="howto-title">基本の使い方</h2>
                 <ol class="howto-list">
                     <li>サイト名を入れる（▾ で今まで入れたものから選べる）</li>
-                    <li>やったことを入れる → 工程が自動で決まる（ちがうときは選びなおす）</li>
+                    <li>やったことを入れる → 工程が自動で入る（ちがうときは書きかえる）</li>
                     <li>「▶ スタート」を押して作業する</li>
                     <li>終わったら「■ ストップ」を押す → 記録・合計・グラフに入る</li>
                 </ol>
@@ -47,242 +47,285 @@
 
                 <h2 class="howto-title">こまったとき</h2>
                 <ul class="howto-list">
-                    <li>スタートを押し忘れた → 「＋ 記録を手で足す」</li>
-                    <li>時間をまちがえた → 記録の「直す」</li>
-                    <li>言葉がわからない → 下の「用語集」</li>
-                    <li>記録を守りたい → ときどき「バックアップを書き出す」</li>
+                    <li>スタートを押し忘れた → 「記録の一覧」タブの「＋ 記録を手で足す」</li>
+                    <li>時間をまちがえた → 「記録の一覧」タブの「直す」</li>
+                    <li>言葉がわからない → 「用語集」タブ</li>
+                    <li>記録を守りたい → ときどき画面の一番下の「バックアップを書き出す」</li>
                 </ul>
             </div>
         </details>
 
-        <!-- ===== ① いまの作業を入れて、時間をはかるところ ===== -->
-        <section class="card">
-            <h2 class="card-title">いまの作業</h2>
+        <!-- ===== タブ（押すと下の中身が切りかわる。しくみは tabs.js） =====
+         role="tablist" などは、読み上げソフトに「ここはタブです」と伝えるためのもの -->
+        <div class="tab-bar" role="tablist" aria-label="画面の切りかえ">
+            <button id="tab-record" class="tab-btn" type="button" role="tab" aria-controls="panel-record">記録する</button>
+            <button id="tab-list" class="tab-btn" type="button" role="tab" aria-controls="panel-list">記録の一覧</button>
+            <button id="tab-stats" class="tab-btn" type="button" role="tab" aria-controls="panel-stats">集計・グラフ</button>
+            <button id="tab-glossary" class="tab-btn" type="button" role="tab"
+                aria-controls="panel-glossary">用語集</button>
+        </div>
 
-            <!-- ストップ忘れのお知らせ（ふだんはかくしておく） -->
-            <div id="reminder-box" class="reminder-box" role="alert" hidden>
-                <p id="reminder-text" class="reminder-text"></p>
-                <div class="reminder-actions">
-                    <button id="reminder-continue-btn" class="sub-btn" type="button">まだ作業中</button>
-                    <button id="reminder-fix-btn" class="sub-btn" type="button">ストップして時刻を直す</button>
-                    <button id="reminder-stop-btn" class="add-btn" type="button">ストップする</button>
+        <!-- =====================================================
+         タブ1：記録する（左：いまの作業／右：ToDoリスト）
+         ===================================================== -->
+        <div id="panel-record" class="tab-panel" role="tabpanel" aria-labelledby="tab-record">
+            <div class="grid-2">
+
+                <!-- ----- いまの作業を入れて、時間をはかるところ ----- -->
+                <section class="card">
+                    <h2 class="card-title">いまの作業</h2>
+
+                    <!-- ストップ忘れのお知らせ（ふだんはかくしておく） -->
+                    <div id="reminder-box" class="reminder-box" role="alert" hidden>
+                        <p id="reminder-text" class="reminder-text"></p>
+                        <div class="reminder-actions">
+                            <button id="reminder-continue-btn" class="sub-btn" type="button">まだ作業中</button>
+                            <button id="reminder-fix-btn" class="sub-btn" type="button">ストップして時刻を直す</button>
+                            <button id="reminder-stop-btn" class="add-btn" type="button">ストップする</button>
+                        </div>
+                    </div>
+
+                    <!-- サイト名（入力式。▾ で今まで入れたものを選べる。しくみは combo.js） -->
+                    <div id="site-combo" class="combo">
+                        <label class="field-label" for="site-select">サイト名</label>
+                        <div class="combo-box">
+                            <input id="site-select" class="text-input combo-input" type="text" maxlength="30"
+                                placeholder="例：ポートフォリオ" autocomplete="off" role="combobox" aria-expanded="false"
+                                aria-controls="site-history" aria-autocomplete="list">
+                            <button id="site-history-btn" class="combo-btn" type="button"
+                                aria-label="今まで入れたサイト名を見る">▾</button>
+                        </div>
+                        <!-- 今まで入れたサイト名のリスト（ふだんはかくしておく） -->
+                        <ul id="site-history" class="combo-list" role="listbox" aria-label="今まで入れたサイト名" hidden></ul>
+                    </div>
+
+                    <!-- やったこと（ここに入れた言葉から、工程を自動で決める。しくみは auto-task.js） -->
+                    <label class="memo-label">
+                        やったこと（なくてもOK）
+                        <input id="memo-input" class="text-input" type="text" maxlength="100"
+                            placeholder="例：キャッチコピー、ヘッダーのコーディング">
+                    </label>
+
+                    <!-- 工程（入力式。やったことから自動で入る。自分で入れてもOK。しくみは combo.js と auto-task.js） -->
+                    <div id="task-combo" class="combo task-combo">
+                        <label class="field-label" for="task-select">工程（やったことから自動で入ります。自分で入れてもOK）</label>
+                        <div class="combo-box">
+                            <input id="task-select" class="text-input combo-input" type="text" maxlength="30"
+                                placeholder="例：実装" autocomplete="off" role="combobox" aria-expanded="false"
+                                aria-controls="task-history" aria-autocomplete="list">
+                            <button id="task-history-btn" class="combo-btn" type="button"
+                                aria-label="今まで入れた工程を見る">▾</button>
+                        </div>
+                        <!-- 今まで入れた工程のリスト（ふだんはかくしておく） -->
+                        <ul id="task-history" class="combo-list" role="listbox" aria-label="今まで入れた工程" hidden></ul>
+                    </div>
+
+                    <!-- 「◯◯なので△△にしました」のお知らせ -->
+                    <p id="auto-task-note" class="auto-task-note"></p>
+
+                    <!-- 選んだ工程のひとこと説明（JavaScriptで自動で入れる） -->
+                    <p id="task-hint" class="task-hint"></p>
+                    <!-- 押すと「用語集」のタブに切りかわるリンク -->
+                    <a href="#glossary" class="glossary-link">言葉がわからないときは「用語集」へ</a>
+
+                    <!-- はかっている時間（作業時間）を表示するところ -->
+                    <p id="timer" class="timer">00:00:00</p>
+                    <!-- 休けいの時間を表示するところ（JavaScriptで自動で入れる） -->
+                    <p id="break-status" class="break-status"></p>
+
+                    <!-- ボタンを横にならべる -->
+                    <div class="btn-row">
+                        <!-- スタート／ストップのボタン（押すたびに切りかわる） -->
+                        <button id="start-stop-btn" class="btn btn-start" type="button">▶ スタート</button>
+                        <!-- 休けいボタン（はかっている途中だけ出る。hidden ＝ かくしておく） -->
+                        <button id="break-btn" class="btn btn-break" type="button" hidden>☕ 休けい</button>
+                    </div>
+                </section>
+
+                <!-- ----- ToDoリスト（サイトごと・すべてを切りかえて見られる） ----- -->
+                <section class="card">
+                    <h2 class="card-title">ToDoリスト</h2>
+
+                    <!-- ToDoを足すフォーム（サイトを選んで、やることを入れて「追加」） -->
+                    <form id="todo-form" class="todo-form">
+                        <select id="todo-site" class="select" aria-label="ToDoのサイト名"></select>
+                        <input id="todo-input" class="text-input" type="text" maxlength="100" placeholder="例：ヘッダーを作る"
+                            required aria-label="やること">
+                        <button class="add-btn" type="submit">追加</button>
+                    </form>
+
+                    <!-- 見るサイトをしぼるところと、のこりの数 -->
+                    <div class="todo-toolbar">
+                        <label class="todo-filter-label">
+                            表示
+                            <select id="todo-filter" class="select"></select>
+                        </label>
+                        <p id="todo-count" class="todo-count"></p>
+                    </div>
+
+                    <!-- ToDoの一覧（中身は todo.js で自動で入れる） -->
+                    <ul id="todo-list" class="todo-list"></ul>
+
+                    <!-- 終わったものがあるときだけ出るボタン -->
+                    <button id="todo-clear-btn" class="sub-btn" type="button" hidden>終わったものを消す</button>
+                </section>
+
+            </div>
+        </div>
+
+        <!-- =====================================================
+         タブ2：記録の一覧
+         ===================================================== -->
+        <div id="panel-list" class="tab-panel" role="tabpanel" aria-labelledby="tab-list" hidden>
+            <section class="card">
+                <h2 class="card-title">記録の一覧</h2>
+                <!-- スタートを押し忘れたとき用：記録を手で足すボタン -->
+                <button id="add-record-btn" class="sub-btn" type="button">＋ 記録を手で足す</button>
+
+                <!-- 見る期間とサイトをしぼる -->
+                <div class="record-filters">
+                    <label class="record-filter-label">
+                        期間
+                        <select id="record-period" class="select">
+                            <option value="today">今日</option>
+                            <option value="7days" selected>この7日間</option>
+                            <option value="30days">この30日間</option>
+                            <option value="all">すべて</option>
+                        </select>
+                    </label>
+                    <label class="record-filter-label">
+                        サイト
+                        <select id="record-site-filter" class="select"></select>
+                    </label>
                 </div>
+
+                <!-- 「この期間：◯件・合計 ◯」のまとめ（record-list.js で自動で入れる） -->
+                <p id="record-summary" class="record-summary"></p>
+                <!-- 中身はJavaScriptで自動で入れる -->
+                <ul id="record-list" class="record-list"></ul>
+            </section>
+        </div>
+
+        <!-- =====================================================
+         タブ3：集計・グラフ
+         （上：サイトごとの合計・予定と実際／下：グラフ）
+         ===================================================== -->
+        <div id="panel-stats" class="tab-panel" role="tabpanel" aria-labelledby="tab-stats" hidden>
+            <div class="grid-2">
+
+                <!-- ----- サイトごとの合計時間（中に工程ごとの時間も出す） ----- -->
+                <section class="card">
+                    <h2 class="card-title">サイトごとの合計</h2>
+                    <!-- 中身はJavaScriptで自動で入れる -->
+                    <ul id="total-list" class="total-list"></ul>
+                </section>
+
+                <!-- ----- 予定と実際（見積もりの材料にする） ----- -->
+                <section class="card">
+                    <h2 class="card-title">予定と実際</h2>
+                    <p class="plan-lead">工程ごとに予定の時間を入れると、実際にかかった時間とくらべられます。</p>
+
+                    <div class="plan-controls">
+                        <!-- どのサイトを見るか -->
+                        <label class="plan-label">
+                            サイト名
+                            <select id="plan-site" class="select"></select>
+                        </label>
+                        <!-- 受ける金額（入れると時給が出る） -->
+                        <label class="plan-label">
+                            受ける金額（円・なくてもOK）
+                            <input id="plan-price" class="text-input" type="number" min="0" step="1000"
+                                placeholder="例：50000">
+                        </label>
+                    </div>
+
+                    <!-- 予定と実際の表（中身は plan.js で自動で入れる）
+               横に入りきらないときは、表だけ横にスクロールできるようにする -->
+                    <div class="plan-table-wrap">
+                        <table class="plan-table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">工程</th>
+                                    <th scope="col">予定（時間）</th>
+                                    <th scope="col">実際</th>
+                                    <th scope="col">差</th>
+                                </tr>
+                            </thead>
+                            <tbody id="plan-body"></tbody>
+                            <tfoot id="plan-foot"></tfoot>
+                        </table>
+                    </div>
+
+                    <!-- 時給などのまとめ（plan.js で自動で入れる） -->
+                    <p id="plan-summary" class="plan-summary"></p>
+                </section>
+
             </div>
 
-            <!-- サイト名（入力式。▾ で今まで入れたものを選べる。しくみは site-input.js） -->
-            <div id="site-combo" class="combo">
-                <label class="field-label" for="site-select">サイト名</label>
-                <div class="combo-box">
-                    <input id="site-select" class="text-input combo-input" type="text" maxlength="30"
-                        placeholder="例：ポートフォリオ" autocomplete="off" role="combobox" aria-expanded="false"
-                        aria-controls="site-history" aria-autocomplete="list">
-                    <button id="site-history-btn" class="combo-btn" type="button" aria-label="今まで入れたサイト名を見る">▾</button>
+            <!-- ----- グラフ（棒グラフと円グラフを左右にならべる） ----- -->
+            <section class="card">
+                <h2 class="card-title">グラフ</h2>
+
+                <!-- 今日の作業時間の合計（JavaScriptで自動で入れる） -->
+                <p id="today-total" class="today-total"></p>
+
+                <div class="chart-grid">
+                    <!-- 左：棒グラフ（この7日間、1日どれだけやったか） -->
+                    <div class="chart-area">
+                        <h3 class="chart-title">この7日間の作業時間</h3>
+                        <div id="bar-box" class="chart-box">
+                            <!-- canvas ＝ 絵をかくための板。ここにグラフがかかれる -->
+                            <canvas id="bar-chart" role="img" aria-label="この7日間の作業時間の棒グラフ"></canvas>
+                        </div>
+                        <p id="bar-empty" class="empty-text" hidden>この7日間の記録はまだありません</p>
+                    </div>
+
+                    <!-- 右：円グラフ（何に時間を使ったか） -->
+                    <div class="chart-area">
+                        <h3 class="chart-title">何に時間を使ったか</h3>
+                        <div class="chart-controls">
+                            <label class="chart-label">
+                                期間
+                                <select id="chart-period" class="select">
+                                    <option value="today">今日</option>
+                                    <option value="7days" selected>この7日間</option>
+                                    <option value="30days">この30日間</option>
+                                    <option value="all">すべて</option>
+                                </select>
+                            </label>
+                            <label class="chart-label">
+                                分け方
+                                <select id="chart-group" class="select">
+                                    <option value="task">工程ごと</option>
+                                    <option value="site">サイトごと</option>
+                                </select>
+                            </label>
+                        </div>
+                        <div id="pie-box" class="chart-box">
+                            <canvas id="pie-chart" role="img" aria-label="何に時間を使ったかの円グラフ"></canvas>
+                        </div>
+                        <p id="pie-empty" class="empty-text" hidden>この期間の記録はまだありません</p>
+                    </div>
                 </div>
-                <!-- 今まで入れたサイト名のリスト（ふだんはかくしておく） -->
-                <ul id="site-history" class="combo-list" role="listbox" aria-label="今まで入れたサイト名" hidden></ul>
-            </div>
+            </section>
+        </div>
 
-            <!-- やったこと（ここに入れた言葉から、工程を自動で決める。しくみは auto-task.js） -->
-            <label class="memo-label">
-                やったこと（なくてもOK）
-                <input id="memo-input" class="text-input" type="text" maxlength="100"
-                    placeholder="例：キャッチコピー、ヘッダーのコーディング">
-            </label>
+        <!-- =====================================================
+         タブ4：用語集（id="glossary" は、「用語集へ」のリンクの行き先）
+         ===================================================== -->
+        <div id="panel-glossary" class="tab-panel" role="tabpanel" aria-labelledby="tab-glossary" hidden>
+            <section id="glossary" class="card">
+                <h2 class="card-title">用語集</h2>
+                <p class="glossary-lead">Web制作の流れの順に並んでいます。言葉を押すと、くわしい説明が開きます。</p>
+                <!-- 中身は glossary.js で自動で入れる -->
+                <ul id="glossary-list" class="glossary-list"></ul>
+            </section>
+        </div>
 
-            <!-- 工程（入力式。やったことから自動で入る。自分で入れてもOK。しくみは combo.js と auto-task.js） -->
-            <div id="task-combo" class="combo task-combo">
-                <label class="field-label" for="task-select">工程（やったことから自動で入ります。自分で入れてもOK）</label>
-                <div class="combo-box">
-                    <input id="task-select" class="text-input combo-input" type="text" maxlength="30" placeholder="例：実装"
-                        autocomplete="off" role="combobox" aria-expanded="false" aria-controls="task-history"
-                        aria-autocomplete="list">
-                    <button id="task-history-btn" class="combo-btn" type="button" aria-label="今まで入れた工程を見る">▾</button>
-                </div>
-                <!-- 今まで入れた工程のリスト（ふだんはかくしておく） -->
-                <ul id="task-history" class="combo-list" role="listbox" aria-label="今まで入れた工程" hidden></ul>
-            </div>
-
-            <!-- 「◯◯なので△△にしました」のお知らせ -->
-            <p id="auto-task-note" class="auto-task-note"></p>
-
-            <!-- 選んだ工程のひとこと説明（JavaScriptで自動で入れる） -->
-            <p id="task-hint" class="task-hint"></p>
-            <!-- 押すと下の「用語集」まで移動するリンク -->
-            <a href="#glossary" class="glossary-link">言葉がわからないときは「用語集」へ</a>
-
-            <!-- はかっている時間（作業時間）を表示するところ -->
-            <p id="timer" class="timer">00:00:00</p>
-            <!-- 休けいの時間を表示するところ（JavaScriptで自動で入れる） -->
-            <p id="break-status" class="break-status"></p>
-
-            <!-- ボタンを横にならべる -->
-            <div class="btn-row">
-                <!-- スタート／ストップのボタン（押すたびに切りかわる） -->
-                <button id="start-stop-btn" class="btn btn-start" type="button">▶ スタート</button>
-                <!-- 休けいボタン（はかっている途中だけ出る。hidden ＝ かくしておく） -->
-                <button id="break-btn" class="btn btn-break" type="button" hidden>☕ 休けい</button>
-            </div>
-        </section>
-
-        <!-- ===== ToDoリスト（サイトごと・すべてを切りかえて見られる） ===== -->
-        <section class="card">
-            <h2 class="card-title">ToDoリスト</h2>
-
-            <!-- ToDoを足すフォーム（サイトを選んで、やることを入れて「追加」） -->
-            <form id="todo-form" class="todo-form">
-                <select id="todo-site" class="select" aria-label="ToDoのサイト名"></select>
-                <input id="todo-input" class="text-input" type="text" maxlength="100" placeholder="例：ヘッダーを作る" required
-                    aria-label="やること">
-                <button class="add-btn" type="submit">追加</button>
-            </form>
-
-            <!-- 見るサイトをしぼるところと、のこりの数 -->
-            <div class="todo-toolbar">
-                <label class="todo-filter-label">
-                    表示
-                    <select id="todo-filter" class="select"></select>
-                </label>
-                <p id="todo-count" class="todo-count"></p>
-            </div>
-
-            <!-- ToDoの一覧（中身は todo.js で自動で入れる） -->
-            <ul id="todo-list" class="todo-list"></ul>
-
-            <!-- 終わったものがあるときだけ出るボタン -->
-            <button id="todo-clear-btn" class="sub-btn" type="button" hidden>終わったものを消す</button>
-        </section>
-
-        <!-- ===== ② サイトごとの合計時間（中に工程ごとの時間も出す） ===== -->
-        <section class="card">
-            <h2 class="card-title">サイトごとの合計</h2>
-            <!-- 中身はJavaScriptで自動で入れる -->
-            <ul id="total-list" class="total-list"></ul>
-        </section>
-
-        <!-- ===== 予定と実際（見積もりの材料にする） ===== -->
-        <section class="card">
-            <h2 class="card-title">予定と実際</h2>
-            <p class="plan-lead">工程ごとに予定の時間を入れると、実際にかかった時間とくらべられます。</p>
-
-            <div class="plan-controls">
-                <!-- どのサイトを見るか -->
-                <label class="plan-label">
-                    サイト名
-                    <select id="plan-site" class="select"></select>
-                </label>
-                <!-- 受ける金額（入れると時給が出る） -->
-                <label class="plan-label">
-                    受ける金額（円・なくてもOK）
-                    <input id="plan-price" class="text-input" type="number" min="0" step="1000" placeholder="例：50000">
-                </label>
-            </div>
-
-            <!-- 予定と実際の表（中身は plan.js で自動で入れる）
-           横に入りきらないときは、表だけ横にスクロールできるようにする -->
-            <div class="plan-table-wrap">
-                <table class="plan-table">
-                    <thead>
-                        <tr>
-                            <th scope="col">工程</th>
-                            <th scope="col">予定（時間）</th>
-                            <th scope="col">実際</th>
-                            <th scope="col">差</th>
-                        </tr>
-                    </thead>
-                    <tbody id="plan-body"></tbody>
-                    <tfoot id="plan-foot"></tfoot>
-                </table>
-            </div>
-
-            <!-- 時給などのまとめ（plan.js で自動で入れる） -->
-            <p id="plan-summary" class="plan-summary"></p>
-        </section>
-
-        <!-- ===== グラフ ===== -->
-        <section class="card">
-            <h2 class="card-title">グラフ</h2>
-
-            <!-- 今日の作業時間の合計（JavaScriptで自動で入れる） -->
-            <p id="today-total" class="today-total"></p>
-
-            <!-- 棒グラフ：この7日間、1日どれだけやったか -->
-            <h3 class="chart-title">この7日間の作業時間</h3>
-            <div id="bar-box" class="chart-box">
-                <!-- canvas ＝ 絵をかくための板。ここにグラフがかかれる -->
-                <canvas id="bar-chart" role="img" aria-label="この7日間の作業時間の棒グラフ"></canvas>
-            </div>
-            <p id="bar-empty" class="empty-text" hidden>この7日間の記録はまだありません</p>
-
-            <!-- 円グラフ：何に時間を使ったか -->
-            <h3 class="chart-title">何に時間を使ったか</h3>
-            <div class="chart-controls">
-                <label class="chart-label">
-                    期間
-                    <select id="chart-period" class="select">
-                        <option value="today">今日</option>
-                        <option value="7days" selected>この7日間</option>
-                        <option value="30days">この30日間</option>
-                        <option value="all">すべて</option>
-                    </select>
-                </label>
-                <label class="chart-label">
-                    分け方
-                    <select id="chart-group" class="select">
-                        <option value="task">工程ごと</option>
-                        <option value="site">サイトごと</option>
-                    </select>
-                </label>
-            </div>
-            <div id="pie-box" class="chart-box">
-                <canvas id="pie-chart" role="img" aria-label="何に時間を使ったかの円グラフ"></canvas>
-            </div>
-            <p id="pie-empty" class="empty-text" hidden>この期間の記録はまだありません</p>
-        </section>
-
-        <!-- ===== ③ 記録の一覧 ===== -->
-        <section class="card">
-            <h2 class="card-title">記録の一覧</h2>
-            <!-- スタートを押し忘れたとき用：記録を手で足すボタン -->
-            <button id="add-record-btn" class="sub-btn" type="button">＋ 記録を手で足す</button>
-
-            <!-- 見る期間とサイトをしぼる -->
-            <div class="record-filters">
-                <label class="record-filter-label">
-                    期間
-                    <select id="record-period" class="select">
-                        <option value="today">今日</option>
-                        <option value="7days" selected>この7日間</option>
-                        <option value="30days">この30日間</option>
-                        <option value="all">すべて</option>
-                    </select>
-                </label>
-                <label class="record-filter-label">
-                    サイト
-                    <select id="record-site-filter" class="select"></select>
-                </label>
-            </div>
-
-            <!-- 「この期間：◯件・合計 ◯」のまとめ（record-list.js で自動で入れる） -->
-            <p id="record-summary" class="record-summary"></p>
-            <!-- 中身はJavaScriptで自動で入れる -->
-            <ul id="record-list" class="record-list"></ul>
-        </section>
-
-        <!-- ===== ④ 用語集（id="glossary" は、上のリンクの移動先） ===== -->
-        <section id="glossary" class="card">
-            <h2 class="card-title">用語集</h2>
-            <p class="glossary-lead">Web制作の流れの順に並んでいます。言葉を押すと、くわしい説明が開きます。</p>
-            <!-- 中身は glossary.js で自動で入れる -->
-            <ul id="glossary-list" class="glossary-list"></ul>
-        </section>
-
-        <!-- ===== ⑤ データのバックアップ（次回、ボタンだけにします） ===== -->
-        <section class="card">
-            <h2 class="card-title">データのバックアップ</h2>
-            <p class="backup-lead">記録はこのブラウザの中だけに保存されています。ときどき書き出しておくと安心です。</p>
-
+        <!-- ===== 画面の一番下：バックアップのボタン（どのタブでも出る） ===== -->
+        <footer class="app-footer">
             <div class="backup-actions">
-                <!-- 記録・設定・ToDoを全部、1つのファイルに書き出す -->
+                <!-- 記録・ToDo・予定などを全部、1つのファイルに書き出す -->
                 <button id="export-json-btn" class="sub-btn" type="button">バックアップを書き出す</button>
                 <!-- 記録を、Excelで開ける形で書き出す -->
                 <button id="export-csv-btn" class="sub-btn" type="button">Excel用に書き出す（CSV）</button>
@@ -292,10 +335,9 @@
                     <input id="import-input" class="import-input" type="file" accept=".json,application/json">
                 </label>
             </div>
-
             <!-- 「書き出しました」などのお知らせ（JavaScriptで文字を入れる） -->
             <p id="backup-status" class="backup-status" role="status"></p>
-        </section>
+        </footer>
     </main>
 
     <!-- ===== 設定の画面（⚙ボタンで開く） ===== -->
@@ -403,6 +445,8 @@
     <script src="auto-task.js"></script>
     <!-- ⚙ 設定の画面のしくみ -->
     <script src="settings.js"></script>
+    <!-- 画面のタブの切りかえのしくみ（一番さいごに読みこむ） -->
+    <script src="tabs.js"></script>
 </body>
 
 </html>
