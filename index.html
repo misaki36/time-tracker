@@ -140,6 +140,14 @@
                         <!-- 休けいボタン（はかっている途中だけ出る。hidden ＝ かくしておく） -->
                         <button id="break-btn" class="btn btn-break" type="button" hidden>☕ 休けい</button>
                     </div>
+
+                    <!-- 丸いタイマーを画面の上に浮かせるボタン（しくみは pip.js） -->
+                    <div class="pip-open">
+                        <button id="pip-open-btn" class="sub-btn" type="button">⏱ タイマーを画面に浮かせる</button>
+                        <!-- 使えないときの説明など（pip.js で文字を入れる） -->
+                        <p id="pip-note" class="setting-note"></p>
+                    </div>
+
                 </section>
 
                 <!-- ----- ToDoリスト（サイトごと・すべてを切りかえて見られる） ----- -->
@@ -447,6 +455,8 @@
     <script src="settings.js"></script>
     <!-- 画面のタブの切りかえのしくみ（一番さいごに読みこむ） -->
     <script src="tabs.js"></script>
+    <!-- 丸いタイマーを画面に浮かせるしくみ -->
+    <script src="pip.js"></script>
 </body>
 
 </html>

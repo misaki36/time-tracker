@@ -1,0 +1,170 @@
+/* =====================================================
+   画面に浮かせる丸いタイマーの見た目
+   （浮かせたまどは別のページあつかいなので、色もここで決めなおす）
+   ===================================================== */
+:root {
+    --bg: #f7f4ef;
+    /* 背景の色 */
+    --card: #ffffff;
+    /* タイマーの中の色 */
+    --text: #333333;
+    /* 文字の色 */
+    --sub-text: #888888;
+    /* うすい文字の色 */
+    --main: #6b8e7f;
+    /* メインの色 */
+    --stop: #d9776b;
+    /* ストップの色 */
+    --break: #c9a96e;
+    /* 休けいの色 */
+}
+
+/* hidden（かくす）を付けたものは、必ずかくす */
+[hidden] {
+    display: none !important;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+/* まど全体：タイマーを真ん中に置く */
+body {
+    height: 100vh;
+    /* vh ＝ まどの高さに合わせた単位（100vh ＝ まどの高さいっぱい） */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bg);
+    color: var(--text);
+    font-family: "Hiragino Sans", "Noto Sans JP", sans-serif;
+    overflow: hidden;
+    /* スクロールバーを出さない */
+}
+
+/* ----- 丸いタイマー本体（キッチンタイマーの形） ----- */
+.pip-face {
+    position: relative;
+    /* vmin ＝ まどのたて・横の、短いほうに合わせた単位
+     → まどの大きさを変えても、丸がはみ出さずに大きくなったり小さくなったりする */
+    width: 82vmin;
+    height: 82vmin;
+    margin-top: 6vmin;
+    /* 上の「つまみ」のぶん、少し下げる */
+    border-radius: 50%;
+    /* 丸にする */
+    border: 3vmin solid var(--main);
+    background-color: var(--card);
+    box-shadow: 0 2vmin 5vmin rgba(0, 0, 0, 0.12);
+    display: flex;
+    flex-direction: column;
+    /* 中身をたてにならべる */
+    align-items: center;
+    justify-content: center;
+    gap: 2vmin;
+}
+
+/* キッチンタイマーの上の「つまみ」 */
+.pip-face::before {
+    content: '';
+    position: absolute;
+    top: -8vmin;
+    left: 50%;
+    transform: translateX(-50%);
+    /* ちょうど真ん中にする */
+    width: 18vmin;
+    height: 6vmin;
+    background-color: var(--main);
+    border-radius: 2vmin 2vmin 0 0;
+}
+
+/* 休けい中は、ふちとつまみの色を変える */
+.pip-face.is-break {
+    border-color: var(--break);
+}
+
+.pip-face.is-break::before {
+    background-color: var(--break);
+}
+
+/* サイト名・工程（長いときは「…」で切る） */
+.pip-label {
+    max-width: 70%;
+    font-size: 4.5vmin;
+    color: var(--sub-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* 時間の数字 */
+.pip-time {
+    font-size: 12vmin;
+    font-weight: bold;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+    /* 数字の幅をそろえて、ガタガタ動かないようにする */
+}
+
+/* 休けい中は数字をうすくする */
+.pip-face.is-break .pip-time {
+    color: var(--sub-text);
+}
+
+/* 「休けい中 00:03:12」 */
+.pip-break-status {
+    font-size: 4vmin;
+    color: #b08a45;
+    min-height: 1.4em;
+    /* 文字がないときも高さを取って、ガタガタ動かないようにする */
+    font-variant-numeric: tabular-nums;
+}
+
+/* ----- 丸いボタン ----- */
+.pip-buttons {
+    display: flex;
+    gap: 5vmin;
+}
+
+.pip-btn {
+    width: 16vmin;
+    height: 16vmin;
+    border-radius: 50%;
+    border: none;
+    color: #fff;
+    font-size: 6.5vmin;
+    line-height: 1;
+    cursor: pointer;
+    box-shadow: 0 1vmin 2vmin rgba(0, 0, 0, 0.15);
+}
+
+.pip-btn:hover {
+    opacity: 0.85;
+}
+
+/* ボタンの色 */
+.pip-start {
+    background-color: var(--main);
+}
+
+.pip-stop {
+    background-color: var(--stop);
+}
+
+.pip-break {
+    background-color: var(--break);
+}
+
+.pip-resume {
+    background-color: var(--main);
+}
+
+/* 「アプリのほうで入れてね」などのお知らせ */
+.pip-message {
+    max-width: 70%;
+    font-size: 3.5vmin;
+    color: var(--stop);
+    text-align: center;
+}

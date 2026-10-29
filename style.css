@@ -1347,3 +1347,16 @@ details[open]>.record-day-head .record-day-date::before {
         padding: 10px 12px;
     }
 }
+
+/* =====================================================
+   ここから下は「タイマーを画面に浮かせる」ボタン用
+   ===================================================== */
+.pip-open {
+    text-align: center;
+    /* ボタンを真ん中にする */
+    margin-top: 16px;
+}
+
+.pip-open .setting-note {
+    margin: 6px 0 0;
+}
