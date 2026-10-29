@@ -1308,12 +1308,19 @@ details[open]>.record-day-head .record-day-date::before {
 /* ----- 画面の一番下（バックアップのボタン） ----- */
 .app-footer {
     display: flex;
-    flex-wrap: wrap;
+    flex-direction: column;
+    /* ボタンとお知らせの文字を、たてにならべる */
     align-items: center;
-    gap: 12px;
+    /* 真ん中にそろえる */
+    gap: 8px;
     margin-top: 12px;
     padding-top: 16px;
     border-top: 1px solid var(--line);
+}
+
+/* ボタンどうしも真ん中にそろえる */
+.app-footer .backup-actions {
+    justify-content: center;
 }
 
 /* 下のボタンは小さめにする */
