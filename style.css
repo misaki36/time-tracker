@@ -1525,3 +1525,24 @@ html.is-dark-bg .app-footer {
     color: var(--sub-text);
     text-align: center;
 }
+
+/* =====================================================
+   ここから下は「予定の目安」用
+   ===================================================== */
+
+/* 予定の欄のうすい文字（目安の時間） */
+.plan-input::placeholder {
+    color: #b8b3ab;
+}
+
+/* 欄の横の小さな「目安」 */
+.plan-default-tag {
+    display: inline-block;
+    font-size: 11px;
+    color: var(--sub-text);
+    background-color: var(--bg);
+    border-radius: 999px;
+    padding: 1px 8px;
+    margin-left: 6px;
+    vertical-align: middle;
+}

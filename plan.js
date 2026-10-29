@@ -18,6 +18,27 @@ const MAX_PRICE = 100000000;            // 金額の上限（1億円）
 const PLAN_ONE_HOUR = 60 * 60 * 1000;   // 1時間
 const MIN_TIME_FOR_WAGE = 60 * 1000;    // 時給を出すのは、実際の時間が1分以上のときだけ
 
+// 初心者の予定の目安（時間）。1ページのLPやチラシ1枚くらいを作るときの、ざっくりした時間
+// 予定を入れていない工程は、この時間で計算する（自分の感覚に合わせて数字を変えてOK）
+const BEGINNER_PLAN_HOURS = {
+    'ヒアリング': 2,
+    '情報設計': 3,
+    'ワイヤー': 3,
+    'デザインカンプ': 8,
+    'ロゴ制作': 4,
+    '入稿データ': 1,
+    '実装': 15,
+    '検証': 2,
+    '修正': 3,
+    '調べもの': 3
+};
+
+// その工程の目安の時間を取り出す（目安がない工程は0）
+// hasOwnProperty ＝ 「この表に、その名前が本当にのっているか」を調べる（安全のため）
+function getBeginnerHours(task) {
+    return Object.prototype.hasOwnProperty.call(BEGINNER_PLAN_HOURS, task) ? BEGINNER_PLAN_HOURS[task] : 0;
+}
+
 // ----- データの形をチェックする -----
 
 // 予定の時間が正しいか（0より大きく、999時間まで）
@@ -254,12 +275,23 @@ function renderPlanTable() {
     planBody.textContent = '';
     let planTotal = 0;
     let actualTotal = 0;
+    let usedBeginnerHours = false; // 目安の時間を使った工程があるか
 
     // 工程ごとに1行ずつ作る
     taskNames.forEach(function (task) {
-        const planHours = entry && entry.tasks[task] ? entry.tasks[task] : 0;
-        const planMs = planHours * PLAN_ONE_HOUR;
         const actualMs = actual[task] || 0;
+        const enteredHours = entry && entry.tasks[task] ? entry.tasks[task] : 0; // 自分で入れた予定
+        const beginnerHours = getBeginnerHours(task);                            // 初心者の目安
+
+        // 自分で入れた予定があればそれを使う
+        // なければ、その工程の記録があるときだけ、目安の時間を使う
+        const useBeginner = enteredHours === 0 && beginnerHours > 0 && actualMs > 0;
+        const planHours = enteredHours > 0 ? enteredHours : (useBeginner ? beginnerHours : 0);
+        if (useBeginner) {
+            usedBeginnerHours = true;
+        }
+
+        const planMs = planHours * PLAN_ONE_HOUR;
         planTotal += planMs;
         actualTotal += actualMs;
 
@@ -270,7 +302,7 @@ function renderPlanTable() {
         th.scope = 'row';
         tr.appendChild(th);
 
-        // 予定を入れる欄
+        // 予定を入れる欄（入れていないときは、目安の時間をうすい文字で出す）
         const planTd = document.createElement('td');
         const input = document.createElement('input');
         input.type = 'number';
@@ -278,14 +310,19 @@ function renderPlanTable() {
         input.min = '0';
         input.max = String(MAX_PLAN_HOURS);
         input.step = '0.5';
-        input.placeholder = '—';
-        input.value = planHours > 0 ? String(planHours) : '';
+        input.placeholder = beginnerHours > 0 ? String(beginnerHours) : '—'; // placeholder ＝ うすい文字
+        input.value = enteredHours > 0 ? String(enteredHours) : '';
         input.setAttribute('aria-label', task + 'の予定時間（時間）'); // 読み上げソフト用の説明
         // change ＝ 入力が終わったとき（Enterを押す・ほかの場所を押す）に動く
         input.addEventListener('change', function () {
             updatePlanHours(site, task, input);
         });
         planTd.appendChild(input);
+
+        // 目安の時間で計算しているときは、横に小さく「目安」と出す
+        if (useBeginner) {
+            planTd.appendChild(createElement('span', 'plan-default-tag', '目安'));
+        }
         tr.appendChild(planTd);
 
         // 実際と差
@@ -306,7 +343,7 @@ function renderPlanTable() {
     totalRow.appendChild(createDiffCell(actualTotal, planTotal));
     planFoot.appendChild(totalRow);
 
-    // ----- 金額の欄 -----
+    // ----- 金額の欄（かくしてあるけど、時給の計算のカードと同じ金額を入れておく） -----
     planPrice.value = entry && entry.price ? String(entry.price) : '';
 
     // ----- まとめ -----
@@ -315,16 +352,8 @@ function renderPlanTable() {
         const percent = Math.round(actualTotal / planTotal * 100);
         lines.push('予定の時間の ' + percent + '% を使いました');
     }
-    if (entry && entry.price) {
-        // toLocaleString ＝ 「12345」を「12,345」のように3けたごとに「,」を付ける
-        if (actualTotal >= MIN_TIME_FOR_WAGE) {
-            const wage = Math.round(entry.price / (actualTotal / PLAN_ONE_HOUR));
-            lines.push('いまの時給：約 ' + wage.toLocaleString() + '円');
-        }
-        if (planTotal > 0) {
-            const planWage = Math.round(entry.price / (planTotal / PLAN_ONE_HOUR));
-            lines.push('予定どおりに終わったときの時給：約 ' + planWage.toLocaleString() + '円');
-        }
+    if (usedBeginnerHours) {
+        lines.push('※ 予定を入れていない工程は、初心者の目安の時間（うすい数字）で計算しています');
     }
     planSummary.textContent = lines.join('\n');
 }
