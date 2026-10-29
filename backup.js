@@ -106,7 +106,9 @@ exportJsonBtn.addEventListener('click', function () {
         tasks: tasks,
         todos: todos,
         // 予定と金額（plan.js があるときだけ）
-        plans: typeof getPlansForBackup === 'function' ? getPlansForBackup() : {}
+        plans: typeof getPlansForBackup === 'function' ? getPlansForBackup() : {},
+        // 工程ごとの金額（wage.js があるときだけ）
+        wages: typeof getWagesForBackup === 'function' ? getWagesForBackup() : {}
     };
 
     // JSON.stringify の「null, 2」は、人が読んでも分かりやすいように字下げする設定
@@ -238,6 +240,12 @@ importInput.addEventListener('change', function () {
         // 予定と金額も入れかえる（plan.js があるときだけ）
         if (typeof setPlansFromBackup === 'function') {
             setPlansFromBackup(data.plans);
+        }
+
+
+        // 工程ごとの金額も入れかえる（wage.js があるときだけ）
+        if (typeof setWagesFromBackup === 'function') {
+            setWagesFromBackup(data.wages);
         }
 
         // ブラウザに保存する

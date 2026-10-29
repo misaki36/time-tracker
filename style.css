@@ -1504,3 +1504,24 @@ html.is-dark-bg .app-footer {
     border-radius: 12px;
     padding: 12px;
 }
+
+/* =====================================================
+   ここから下は「時給の計算」用
+   ===================================================== */
+
+/* 金額を入れる欄（予定の欄より少し広くする） */
+.wage-input {
+    width: 110px;
+}
+
+/* 時給の数字 */
+.wage-value {
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+/* 表が空っぽのときの文字 */
+.wage-empty {
+    color: var(--sub-text);
+    text-align: center;
+}

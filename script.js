@@ -19,7 +19,11 @@ const TASKS_KEY = 'timeTracker_tasks';     // 今まで入れた工程のリス�
 
 // 最初から入っているサイト名と工程
 const DEFAULT_SITES = ['ポートフォリオ', 'Moon Bloom', 'シリウスサイト'];
-const DEFAULT_TASKS = ['ヒアリング', '情報設計', 'ワイヤー', 'デザインカンプ', '実装', '検証', '修正', '調べもの'];
+const DEFAULT_TASKS = ['ヒアリング', '情報設計', 'ワイヤー', 'デザインカンプ', 'ロゴ制作', '入稿データ', '実装', '検証', '修正', '調べもの'];
+
+// あとから足した工程（前から使っている人のリストにも、1回だけ自動で足す）
+const NEW_TASKS = ['ロゴ制作', '入稿データ'];
+const ADDED_TASKS_KEY = 'timeTracker_addedTasks'; // 自動で足したものを覚えておく名前
 
 // 前のバージョンの名前を、新しい工程の名前に置きかえる表
 const OLD_TASK_NAMES = {
@@ -163,6 +167,27 @@ if (isFirstTimeNewVersion) {
     saveData(SITES_KEY, sites);
     saveData(TASKS_KEY, tasks);
 }
+// あとから足した工程を、今のリストにも1回だけ足す
+// （「デザインカンプ」の次に入れる。1回足したものは覚えておいて、自分で消したらもう足さない）
+const loadedAddedTasks = loadData(ADDED_TASKS_KEY, []);
+const addedTasks = Array.isArray(loadedAddedTasks)
+    ? loadedAddedTasks.filter(function (name) { return typeof name === 'string'; })
+    : [];
+let insertIndex = tasks.indexOf('デザインカンプ') + 1; // 入れる場所（デザインカンプの次）
+NEW_TASKS.forEach(function (name) {
+    if (addedTasks.includes(name)) return; // 前に1回足していたら、もう足さない
+    if (!tasks.includes(name)) {
+        if (insertIndex > 0) {
+            tasks.splice(insertIndex, 0, name); // デザインカンプの次に入れる
+            insertIndex += 1;
+        } else {
+            tasks.push(name); // デザインカンプがなければ、一番うしろに入れる
+        }
+    }
+    addedTasks.push(name);
+});
+saveData(TASKS_KEY, tasks);
+saveData(ADDED_TASKS_KEY, addedTasks);
 
 // 1秒ごとに時間を更新するしくみの番号（止めるときに使う）
 let timerId = null;
@@ -520,7 +545,18 @@ function renderRecords() {
     if (typeof renderPlans === 'function') {
         renderPlans();
     }
+
+    // 予定と実際も作り直す（plan.js が読みこまれてからだけ動く）
+    if (typeof renderPlans === 'function') {
+        renderPlans();
+    }
+
+    // 時給の計算も作り直す（wage.js が読みこまれてからだけ動く）
+    if (typeof renderWage === 'function') {
+        renderWage();
+    }
 }
+
 
 // 画面を全部作り直す
 function renderAll() {

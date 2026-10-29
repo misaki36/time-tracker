@@ -241,8 +241,8 @@
                             サイト名
                             <select id="plan-site" class="select"></select>
                         </label>
-                        <!-- 受ける金額（入れると時給が出る） -->
-                        <label class="plan-label">
+                        <!-- 受ける金額（「時給の計算」のカードに引っこししたので、かくしておく） -->
+                        <label class="plan-label" hidden>
                             受ける金額（円・なくてもOK）
                             <input id="plan-price" class="text-input" type="number" min="0" step="1000"
                                 placeholder="例：50000">
@@ -271,6 +271,44 @@
                 </section>
 
             </div>
+            <!-- ----- 時給の計算（記録の時間から出す。しくみは wage.js） ----- -->
+            <section class="card">
+                <h2 class="card-title">時給の計算</h2>
+                <p class="plan-lead">記録した時間から、時給を計算します。工程ごとの金額も入れると、作業ごとの時給も分かります。</p>
+
+                <div class="plan-controls">
+                    <!-- どのサイトを計算するか -->
+                    <label class="plan-label">
+                        サイト名
+                        <select id="wage-site" class="select"></select>
+                    </label>
+                    <!-- 受け取る金額の合計（割引のあとの金額） -->
+                    <label class="plan-label">
+                        受け取る金額の合計（円・割引のあと）
+                        <input id="wage-total" class="text-input" type="number" min="0" step="1000"
+                            placeholder="例：17500">
+                    </label>
+                </div>
+
+                <!-- 工程ごとの時間・金額・時給の表（中身は wage.js で自動で入れる） -->
+                <div class="plan-table-wrap">
+                    <table class="plan-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">工程</th>
+                                <th scope="col">かかった時間</th>
+                                <th scope="col">金額（円・なくてもOK）</th>
+                                <th scope="col">時給</th>
+                            </tr>
+                        </thead>
+                        <tbody id="wage-body"></tbody>
+                        <tfoot id="wage-foot"></tfoot>
+                    </table>
+                </div>
+
+                <!-- 全体の時給・お金をもらっていない作業などのまとめ -->
+                <p id="wage-summary" class="plan-summary"></p>
+            </section>
 
             <!-- ----- グラフ（棒グラフと円グラフを左右にならべる） ----- -->
             <section class="card">
@@ -487,6 +525,8 @@
     <script src="reminder.js"></script>
     <!-- 予定と実際のしくみ -->
     <script src="plan.js"></script>
+    <!-- 時給の計算のしくみ（plan.js の部品も使うので、plan.js の下に書く） -->
+    <script src="wage.js"></script>
     <!-- 記録の一覧を日ごとにまとめるしくみ -->
     <script src="record-list.js"></script>
     <!-- サイト名・工程の入力欄のしくみ（▾ のリスト・× で消す） -->
