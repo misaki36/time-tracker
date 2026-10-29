@@ -74,7 +74,10 @@ function openEditDialog(index) {
         // ----- 新しく足すとき -----
         editTitle.textContent = '記録を手で足す';
         // 上の「いまの作業」で選んでいるものを、最初から選んでおく
-        ensureOption(editSite, siteSelect.value);
+        // 「いまの作業」のサイト名を最初から選んでおく（空っぽなら、リストの一番上のまま）
+        if (siteSelect.value.trim() !== '') {
+            ensureOption(editSite, siteSelect.value.trim());
+        }
         ensureOption(editTask, taskSelect.value);
         editMemo.value = '';
         // 時刻は「1時間前 〜 いま」を最初に入れておく

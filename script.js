@@ -1,9 +1,9 @@
 // =====================================================
 // 1. 画面の部品をつかまえる（HTMLのidを使って探す）
 // =====================================================
-const siteSelect = document.getElementById('site-select');       // サイト名を選ぶ箱
-const taskSelect = document.getElementById('task-select');       // 工程を選ぶ箱
-const memoInput = document.getElementById('memo-input');         // メモの入力欄
+const siteSelect = document.getElementById('site-select');       // サイト名の入力欄
+const taskSelect = document.getElementById('task-select');       // 工程の入力欄
+const memoInput = document.getElementById('memo-input');         // やったこと（メモ）の入力欄
 const timerText = document.getElementById('timer');              // 作業時間の表示
 const breakStatus = document.getElementById('break-status');     // 休けい時間の表示
 const startStopBtn = document.getElementById('start-stop-btn');  // スタート／ストップボタン
@@ -11,23 +11,15 @@ const breakBtn = document.getElementById('break-btn');           // 休けいボ
 const recordList = document.getElementById('record-list');       // 記録の一覧
 const totalList = document.getElementById('total-list');         // サイトごとの合計
 
-// 設定のところの部品
-const siteForm = document.getElementById('site-form');                // サイト名を足すフォーム
-const siteInput = document.getElementById('site-input');              // サイト名の入力欄
-const siteSettingList = document.getElementById('site-setting-list'); // 今あるサイト名の一覧
-const taskForm = document.getElementById('task-form');                // 工程を足すフォーム
-const taskInput = document.getElementById('task-input');              // 工程の入力欄
-const taskSettingList = document.getElementById('task-setting-list'); // 今ある工程の一覧
-
 // ブラウザに保存するときの「名前」（ロッカーの名札のようなもの）
 const RECORDS_KEY = 'timeTracker_records'; // 記録の一覧
 const RUNNING_KEY = 'timeTracker_running'; // いまはかっている作業
-const SITES_KEY = 'timeTracker_sites';     // サイト名のリスト
-const TASKS_KEY = 'timeTracker_tasks';     // 工程のリスト
+const SITES_KEY = 'timeTracker_sites';     // 今まで入れたサイト名のリスト
+const TASKS_KEY = 'timeTracker_tasks';     // 今まで入れた工程のリスト
 
 // 最初から入っているサイト名と工程
 const DEFAULT_SITES = ['ポートフォリオ', 'Moon Bloom', 'シリウスサイト'];
-const DEFAULT_TASKS = ['情報設計', 'ワイヤー', 'デザインカンプ', '実装', '修正', '調べもの'];
+const DEFAULT_TASKS = ['ヒアリング', '情報設計', 'ワイヤー', 'デザインカンプ', '実装', '検証', '修正', '調べもの'];
 
 // 前のバージョンの名前を、新しい工程の名前に置きかえる表
 const OLD_TASK_NAMES = {
@@ -37,7 +29,7 @@ const OLD_TASK_NAMES = {
 
 // 文字の長さの上限（長すぎる文字で画面がくずれないように）
 const MAX_NAME_LENGTH = 30;  // サイト名・工程
-const MAX_MEMO_LENGTH = 100; // メモ
+const MAX_MEMO_LENGTH = 100; // やったこと（メモ）
 
 // =====================================================
 // 2. 保存・読みこみのしくみ（安全対策つき）
@@ -78,8 +70,8 @@ function isValidMemo(memo) {
 // 記録の形が正しいかチェックする（おかしなデータを読みこまないため）
 function isValidRecord(record) {
     if (record === null || typeof record !== 'object') return false;
-    if (typeof record.site !== 'string') return false;        // サイト名が文字か
-    if (typeof record.task !== 'string') return false;        // 工程が文字か
+    if (typeof record.site !== 'string' || record.site === '') return false; // サイト名が文字で、空っぽでないか
+    if (typeof record.task !== 'string' || record.task === '') return false; // 工程が文字で、空っぽでないか
     if (!isValidMemo(record.memo)) return false;              // メモが正しい形か
     if (!Number.isFinite(record.startTime)) return false;     // 始めた時刻が数字か
     if (!Number.isFinite(record.endTime)) return false;       // 終わった時刻が数字か
@@ -118,10 +110,11 @@ function isValidRunning(data) {
 
 // サイト名・工程のリストを安全に取り出す
 // 文字だけ・空っぽでない・長すぎない・同じものがない、を守ったリストにする
+// （全部消して空っぽにしたときは、空っぽのままにする）
 function loadNameList(key, defaults) {
     const loaded = loadData(key, null);
     if (!Array.isArray(loaded)) {
-        return defaults.slice(); // なければ最初のリストのコピーを使う
+        return defaults.slice(); // まだ保存されていなければ、最初のリストのコピーを使う
     }
     const cleanList = [];
     loaded.forEach(function (name) {
@@ -132,8 +125,7 @@ function loadNameList(key, defaults) {
         if (cleanList.includes(trimmed)) return;           // 同じものがあれば飛ばす
         cleanList.push(trimmed);
     });
-    // 1つも残らなかったら最初のリストにもどす
-    return cleanList.length > 0 ? cleanList : defaults.slice();
+    return cleanList;
 }
 
 // =====================================================
@@ -143,7 +135,7 @@ function loadNameList(key, defaults) {
 // 工程のリストがまだ保存されていない ＝ 新しいバージョンを初めて開いた、ということ
 const isFirstTimeNewVersion = localStorage.getItem(TASKS_KEY) === null;
 
-// サイト名と工程のリスト
+// 今まで入れたサイト名と工程のリスト
 let sites = loadNameList(SITES_KEY, DEFAULT_SITES);
 let tasks = loadNameList(TASKS_KEY, DEFAULT_TASKS);
 
@@ -213,6 +205,11 @@ function cleanMemo(text) {
     return text.trim().slice(0, MAX_MEMO_LENGTH);
 }
 
+// 入力されたサイト名・工程を、保存してよい形に整える
+function cleanName(text) {
+    return text.trim().slice(0, MAX_NAME_LENGTH);
+}
+
 // タグを作って、クラス名と文字を入れる
 // textContent を使うので、文字の中に <script> などがあっても「ただの文字」として表示される（安全）
 function createElement(tagName, className, text) {
@@ -226,7 +223,7 @@ function createElement(tagName, className, text) {
     return element;
 }
 
-// 選ぶ箱(select)の中身を、リストから作り直す
+// 選ぶ箱(select)の中身を、リストから作り直す（edit.js などで使う）
 function fillSelect(select, list) {
     const current = select.value; // 今選んでいるものを覚えておく
     select.textContent = '';      // いったん中身を空にする
@@ -242,7 +239,7 @@ function fillSelect(select, list) {
     }
 }
 
-// 選ぶ箱にその名前がなければ足す（はかっている途中の名前を表示するため）
+// 選ぶ箱にその名前がなければ足す（リストにない名前も表示できるように）
 function ensureOption(select, name) {
     const exists = Array.from(select.options).some(function (option) {
         return option.value === name;
@@ -256,16 +253,41 @@ function ensureOption(select, name) {
     select.value = name;
 }
 
+// 名前がリストになければ足して保存する（サイト名・工程の共通）
+function addNameIfNew(list, key, name) {
+    if (!list.includes(name)) {
+        list.push(name);
+        saveData(key, list);
+    }
+}
+
 // =====================================================
 // 5. スタート／ストップ／休けいのしくみ
 // =====================================================
 
 // スタートしたとき
 function start() {
-    // いま選んでいるサイト名・工程・メモ・始めた時刻をまとめる
+    // サイト名と工程をチェックする
+    const site = cleanName(siteSelect.value);
+    const task = cleanName(taskSelect.value);
+    if (site === '') {
+        alert('サイト名を入れてください。');
+        siteSelect.focus(); // 入力欄にカーソルを置く
+        return;
+    }
+    if (task === '') {
+        alert('工程を入れてください（やったことを入れると、自動で入ります）。');
+        taskSelect.focus();
+        return;
+    }
+    // 初めての名前なら、今まで入れたもののリストに足す
+    addNameIfNew(sites, SITES_KEY, site);
+    addNameIfNew(tasks, TASKS_KEY, task);
+
+    // いまのサイト名・工程・メモ・始めた時刻をまとめる
     running = {
-        site: siteSelect.value,
-        task: taskSelect.value,
+        site: site,
+        task: task,
         memo: cleanMemo(memoInput.value),
         startTime: Date.now(), // いまの時刻
         breakTotal: 0,         // 休けいした時間の合計
@@ -274,13 +296,14 @@ function start() {
     // はかっている途中の作業もブラウザに保存しておく
     saveData(RUNNING_KEY, running);
     showRunning();
+    renderAll(); // 新しい名前が、ToDoなどの選ぶ箱にも出るように
 }
 
 // はかっている間の画面にする
 function showRunning() {
-    // 選んだものを表示して、はかっている間は変えられないようにする
-    ensureOption(siteSelect, running.site);
-    ensureOption(taskSelect, running.task);
+    // サイト名と工程を表示して、はかっている間は変えられないようにする
+    siteSelect.value = running.site;
+    taskSelect.value = running.task;
     siteSelect.disabled = true;
     taskSelect.disabled = true;
 
@@ -387,9 +410,9 @@ function stop() {
     clearInterval(timerId);
     timerText.textContent = '00:00:00';
     breakStatus.textContent = '';
-    siteSelect.disabled = false;
+    siteSelect.disabled = false; // サイト名と工程は残しておく（続けて同じ作業をすることが多いので）
     taskSelect.disabled = false;
-    memoInput.value = ''; // メモ欄を空にもどす
+    memoInput.value = '';        // メモ欄は空にもどす
 
     // ボタンを「スタート」にもどして、休けいボタンをかくす
     startStopBtn.textContent = '▶ スタート';
@@ -430,102 +453,8 @@ function deleteRecord(index) {
 }
 
 // =====================================================
-// 6. サイト名・工程の設定（追加・削除）
+// 6. 画面に表示する
 // =====================================================
-
-// 名前を1つ足す（サイト名でも工程でも使える共通の関数）
-function addName(list, key, input, label) {
-    const name = input.value.trim(); // 前後の空白を取る
-
-    if (name === '') {
-        return; // 空っぽなら何もしない
-    }
-    if (name.length > MAX_NAME_LENGTH) {
-        alert(label + 'は' + MAX_NAME_LENGTH + '文字までにしてください。');
-        return;
-    }
-    if (list.includes(name)) {
-        alert('「' + name + '」はもうあります。');
-        return;
-    }
-
-    list.push(name);     // リストに足す
-    saveData(key, list); // 保存する
-    input.value = '';    // 入力欄を空にもどす
-    renderAll();
-}
-
-// 名前を1つ消す（サイト名でも工程でも使える共通の関数）
-function deleteName(list, key, name, runningName) {
-    if (list.length <= 1) {
-        alert('1つは残しておいてください。');
-        return;
-    }
-    if (running && runningName === name) {
-        alert('はかっている途中なので消せません。ストップしてから消してください。');
-        return;
-    }
-    if (!confirm('「' + name + '」を選ぶリストから消しますか？\n（これまでの記録は消えません）')) {
-        return;
-    }
-
-    const index = list.indexOf(name);
-    list.splice(index, 1); // リストから取りのぞく
-    saveData(key, list);
-    renderAll();
-}
-
-// サイト名のフォームで「追加」が押されたとき
-siteForm.addEventListener('submit', function (event) {
-    event.preventDefault(); // ページが読みこみ直されないようにする
-    addName(sites, SITES_KEY, siteInput, 'サイト名');
-});
-
-// 工程のフォームで「追加」が押されたとき
-taskForm.addEventListener('submit', function (event) {
-    event.preventDefault();
-    addName(tasks, TASKS_KEY, taskInput, '工程');
-});
-
-// 設定の一覧（丸いラベル）を作る
-function renderSettingList(ul, list, onDelete) {
-    ul.textContent = '';
-    list.forEach(function (name) {
-        const li = createElement('li', 'setting-item');
-        li.appendChild(createElement('span', '', name));
-
-        // 「×」ボタン（押したらその名前を消す）
-        const deleteBtn = createElement('button', 'setting-delete', '×');
-        deleteBtn.type = 'button';
-        deleteBtn.setAttribute('aria-label', name + 'を消す'); // 読み上げソフト用の説明
-        deleteBtn.addEventListener('click', function () {
-            onDelete(name);
-        });
-        li.appendChild(deleteBtn);
-
-        ul.appendChild(li);
-    });
-}
-
-// =====================================================
-// 7. 画面に表示する
-// =====================================================
-
-// 選ぶ箱と設定の一覧を作り直す
-function renderSettings() {
-    // はかっている途中は、選ぶ箱を作り直さない（表示がずれないように）
-    if (!running) {
-        fillSelect(siteSelect, sites);
-        fillSelect(taskSelect, tasks);
-    }
-
-    renderSettingList(siteSettingList, sites, function (name) {
-        deleteName(sites, SITES_KEY, name, running ? running.site : null);
-    });
-    renderSettingList(taskSettingList, tasks, function (name) {
-        deleteName(tasks, TASKS_KEY, name, running ? running.task : null);
-    });
-}
 
 // 記録の一覧と合計を作り直す
 function renderRecords() {
@@ -595,7 +524,6 @@ function renderRecords() {
 
 // 画面を全部作り直す
 function renderAll() {
-    renderSettings();
     renderRecords();
     // 工程の説明も更新する（glossary.js が読みこまれてからだけ動く）
     if (typeof updateTaskHint === 'function') {
@@ -607,14 +535,17 @@ function renderAll() {
     }
 }
 
-
 // =====================================================
-// 8. ページを開いたときに最初に動くところ
+// 7. ページを開いたときに最初に動くところ
 // =====================================================
-renderAll(); // 保存してある設定と記録を表示する
+renderAll(); // 保存してある記録などを表示する
 
-// はかっている途中でブラウザを閉じていたら、続きから再開する
-// （休けい中に閉じていたら、休けい中のまま再開する）
 if (running) {
+    // はかっている途中でブラウザを閉じていたら、続きから再開する
+    // （休けい中に閉じていたら、休けい中のまま再開する）
     showRunning();
+} else if (records.length > 0) {
+    // はかっていなければ、最後に記録したサイト名と工程を最初から入れておく
+    siteSelect.value = records[0].site;
+    taskSelect.value = records[0].task;
 }

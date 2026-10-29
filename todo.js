@@ -183,10 +183,12 @@ function startTodo(todo) {
         stop();
     }
 
-    // サイト名をそのToDoのサイトにして、メモにやることを入れてスタート
-    ensureOption(siteSelect, todo.site);
-    memoInput.value = todo.text;
-    start();
+    siteSelect.value = todo.site;  // サイト名の入力欄に入れる
+    memoInput.value = todo.text;   // やったことに入れる
+    // やったことから工程を自動で決める（auto-task.js があるときだけ）
+    if (typeof autoChooseTask === 'function') {
+        autoChooseTask();
+    }
 
     // 一番上（タイマーのところ）までスクロールする
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -202,6 +204,11 @@ todoForm.addEventListener('submit', function (event) {
     }
     if (text.length > MAX_TODO_LENGTH) {
         alert('ToDoは' + MAX_TODO_LENGTH + '文字までにしてください。');
+        return;
+    }
+
+    if (todoSite.value === '') {
+        alert('サイト名がまだありません。「いまの作業」でサイト名を入れてください。');
         return;
     }
 

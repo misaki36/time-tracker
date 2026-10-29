@@ -1058,3 +1058,168 @@ details[open]>.record-day-head .record-day-date::before {
 .howto-list li {
     margin-bottom: 2px;
 }
+
+/* =====================================================
+   ここから下は「サイト名の入力式・工程の自動・⚙設定」用
+   ===================================================== */
+
+/* ----- タイトルと⚙ボタン ----- */
+.app-header {
+    position: relative;
+    /* ⚙ボタンを右はしに置くための基準 */
+}
+
+.settings-btn {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: none;
+    border: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--sub-text);
+    padding: 6px 8px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.settings-btn:hover {
+    background-color: var(--card);
+}
+
+/* 設定の画面の「閉じる」ボタンを右にする */
+.settings-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+}
+
+/* ----- サイト名の入力欄（入力欄＋▾ボタン＋リスト） ----- */
+.combo {
+    position: relative;
+    /* リストを入力欄のすぐ下に出すための基準 */
+    margin-bottom: 4px;
+}
+
+/* 入力欄の上の小さな文字 */
+.field-label {
+    display: block;
+    font-size: 13px;
+    color: var(--sub-text);
+    margin-bottom: 4px;
+}
+
+/* 入力欄と▾ボタンを横にくっつける */
+.combo-box {
+    display: flex;
+}
+
+.combo-input {
+    flex: 1;
+    min-width: 0;
+    /* せまい画面ではみ出さないように */
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.combo-btn {
+    width: 44px;
+    font-size: 16px;
+    color: var(--sub-text);
+    background-color: #fff;
+    border: 1px solid var(--line);
+    border-left: none;
+    border-radius: 0 8px 8px 0;
+    cursor: pointer;
+}
+
+/* はかっている間は、入力欄も▾ボタンもうすくする */
+.combo-input:disabled,
+.combo-btn:disabled {
+    background-color: #f3f3f3;
+    color: var(--sub-text);
+    cursor: default;
+}
+
+/* 今まで入れたサイト名のリスト（入力欄の下に重ねて出す） */
+.combo-list {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    z-index: 10;
+    /* ほかのものより上に出す */
+    margin-top: 4px;
+    padding: 4px 0;
+    list-style: none;
+    background-color: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    max-height: 240px;
+    overflow-y: auto;
+    /* 多いときはリストの中だけスクロール */
+}
+
+/* リストの1行（サイト名と×を横にならべる） */
+.combo-item {
+    display: flex;
+    align-items: center;
+}
+
+/* サイト名（押すと選べる） */
+.combo-option {
+    flex: 1;
+    text-align: left;
+    font-size: 15px;
+    color: var(--text);
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.combo-option:hover,
+.combo-option:focus {
+    background-color: var(--bg);
+}
+
+/* 右の×（押すと、そのサイト名をリストから消す） */
+.combo-delete {
+    font-size: 16px;
+    color: var(--sub-text);
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.combo-delete:hover {
+    color: var(--stop);
+}
+
+/* 「まだありません」などの文字 */
+.combo-empty {
+    font-size: 13px;
+    color: var(--sub-text);
+    padding: 8px 12px;
+}
+
+/* ----- 工程 ----- */
+.task-label {
+    margin-top: 12px;
+}
+
+/* 「◯◯なので△△にしました」 */
+.auto-task-note {
+    font-size: 12px;
+    color: var(--main);
+    margin-top: 4px;
+    min-height: 1.5em;
+    /* 文字がないときも高さを取って、ガタガタ動かないようにする */
+}
+
+/* 工程の入力欄の上に少し余白（サイト名・やったことと間をあける） */
+.task-combo {
+    margin-top: 12px;
+}
