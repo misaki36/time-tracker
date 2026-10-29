@@ -41,6 +41,11 @@ function buildPipContent(doc) {
     link.href = new URL('pip.css', location.href).href; // アプリと同じ場所にある pip.css
     doc.head.appendChild(link);
 
+    // アプリと同じ色をぬる（theme.js があるときだけ）
+    if (typeof applyThemeTo === 'function') {
+        applyThemeTo(doc);
+    }
+
     // 丸いタイマー本体
     const face = doc.createElement('div');
     face.className = 'pip-face';

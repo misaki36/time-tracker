@@ -5,13 +5,15 @@
     <meta charset="UTF-8">
     <!-- セキュリティのルール：このフォルダの中のファイル以外は読みこまない・動かさない -->
     <meta http-equiv="Content-Security-Policy"
-        content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+        content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' blob:; object-src 'none'; base-uri 'none'; form-action 'none'">
     <!-- スマホでも見やすくするための設定 -->
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- ブラウザのタブに出る名前（アプリ名が決まったらここを変える） -->
     <title>作業時間きろく</title>
     <!-- 見た目のファイル(CSS)を読みこむ -->
     <link rel="stylesheet" href="style.css">
+    <!-- 色を変えるしくみ（画面が出る前に色を決めたいので、ここで読みこむ） -->
+    <script src="theme.js"></script>
 </head>
 
 <body>
@@ -352,6 +354,46 @@
     <dialog id="settings-dialog" class="edit-dialog">
         <h2 class="card-title">設定</h2>
 
+        <!-- カラーの設定（しくみは theme.js） -->
+        <div class="setting-block">
+            <h3 class="setting-title">カラー</h3>
+            <!-- 色の組み合わせの見本（theme.js で自動で入れる） -->
+            <div id="theme-list" class="theme-list" role="radiogroup" aria-label="色の組み合わせを選ぶ"></div>
+            <!-- ボタンと背景を、それぞれ好きな色にする（type="color" ＝ 色を選ぶ入力欄） -->
+            <div class="theme-custom-row">
+                <label class="theme-custom-label">
+                    <input id="theme-main" class="theme-custom" type="color" value="#6b8e7f">
+                    ボタンの色
+                </label>
+                <label class="theme-custom-label">
+                    <input id="theme-bg" class="theme-custom" type="color" value="#f7f4ef">
+                    背景の色
+                </label>
+            </div>
+        </div>
+
+        <!-- 背景の画像の設定（しくみは bg-image.js） -->
+        <div class="setting-block">
+            <h3 class="setting-title">背景の画像</h3>
+            <div class="bg-image-actions">
+                <!-- 画像を選ぶ（input は見えなくして、label をボタンのように見せる） -->
+                <label class="sub-btn import-label">
+                    画像を選ぶ
+                    <input id="bg-image-input" class="import-input" type="file"
+                        accept="image/png,image/jpeg,image/webp,image/gif">
+                </label>
+                <!-- 画像があるときだけ出る -->
+                <button id="bg-image-remove" class="sub-btn" type="button" hidden>画像をはずす</button>
+            </div>
+            <!-- 画像のうすさ（type="range" ＝ つまみを動かす入力欄。画像があるときだけ出る） -->
+            <label id="bg-veil-label" class="bg-veil-label" hidden>
+                画像のうすさ（大きいほど、うすくなって文字が読みやすい）
+                <input id="bg-veil" type="range" min="0" max="80" step="5" value="30">
+            </label>
+            <!-- 「設定しました」などのお知らせ -->
+            <p id="bg-image-status" class="setting-note"></p>
+        </div>
+
         <!-- ストップ忘れのお知らせの設定（しくみは reminder.js） -->
         <div class="setting-block">
             <h3 class="setting-title">ストップ忘れのお知らせ</h3>
@@ -457,6 +499,8 @@
     <script src="tabs.js"></script>
     <!-- 丸いタイマーを画面に浮かせるしくみ -->
     <script src="pip.js"></script>
+    <!-- 背景の画像のしくみ -->
+    <script src="bg-image.js"></script>
 </body>
 
 </html>

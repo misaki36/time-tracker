@@ -1360,3 +1360,147 @@ details[open]>.record-day-head .record-day-date::before {
 .pip-open .setting-note {
     margin: 6px 0 0;
 }
+
+/* =====================================================
+   ここから下は「カラー」の設定用
+   ===================================================== */
+
+/* 色見本をならべる（入りきらなければ折り返す） */
+.theme-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-bottom: 12px;
+}
+
+/* 色見本1つ（丸と名前をたてにならべる） */
+.theme-swatch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-size: 12px;
+    color: var(--sub-text);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+/* 色の丸 */
+.theme-circle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 3px solid #fff;
+    box-shadow: 0 0 0 1px var(--line);
+    /* 丸のまわりにうすい線 */
+}
+
+/* 選んでいる色見本（丸のまわりをこい線にして、名前を太字にする） */
+.theme-swatch[aria-checked="true"] {
+    color: var(--text);
+    font-weight: bold;
+}
+
+.theme-swatch[aria-checked="true"] .theme-circle {
+    box-shadow: 0 0 0 2px var(--text);
+}
+
+/* 「好きな色を選ぶ」 */
+.theme-custom-label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--sub-text);
+    cursor: pointer;
+}
+
+/* 好きな色を選んでいるときは太字にする */
+.theme-custom-label.is-active {
+    color: var(--text);
+    font-weight: bold;
+}
+
+/* 色を選ぶ入力欄 */
+.theme-custom {
+    width: 40px;
+    height: 32px;
+    padding: 2px;
+    background-color: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+/* =====================================================
+   ここから下は「ボタンと背景の色を別々に・背景の画像」用
+   ===================================================== */
+
+/* 「ボタンの色」「背景の色」を横にならべる */
+.theme-custom-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+/* 「画像を選ぶ」「画像をはずす」を横にならべる */
+.bg-image-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+/* 画像のうすさのつまみ */
+.bg-veil-label {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 13px;
+    color: var(--sub-text);
+    margin-bottom: 8px;
+}
+
+.bg-veil-label input {
+    accent-color: var(--main);
+    /* つまみの色をメインの色にする */
+}
+
+/* 背景に画像を使っているとき：画面いっぱいに広げて、スクロールしても動かないようにする */
+body.has-bg-image {
+    background-size: cover;
+    /* 画面いっぱいに広げる */
+    background-position: center;
+    background-attachment: fixed;
+    /* スクロールしても画像は動かない */
+}
+
+/* 背景が画像・こい色のとき：タイトルや「使い方」などの文字を、白い板にのせて読みやすくする */
+body.has-bg-image .app-header,
+html.is-dark-bg .app-header {
+    text-align: center;
+}
+
+body.has-bg-image .app-title,
+body.has-bg-image .howto-toggle,
+html.is-dark-bg .app-title,
+html.is-dark-bg .howto-toggle {
+    display: inline-block;
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 999px;
+    padding: 4px 24px;
+}
+
+body.has-bg-image .settings-btn,
+html.is-dark-bg .settings-btn {
+    background-color: rgba(255, 255, 255, 0.9);
+}
+
+body.has-bg-image .app-footer,
+html.is-dark-bg .app-footer {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-top: none;
+    border-radius: 12px;
+    padding: 12px;
+}
